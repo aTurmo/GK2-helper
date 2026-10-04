@@ -1,6 +1,6 @@
 import type { RuneColor } from './domain/runes'
 
-const ALCHEMY_IMAGES = '/images/alchemy'
+const ALCHEMY_IMAGES = `${import.meta.env.BASE_URL}images/alchemy`
 
 export function recipeImage(recipeId: string): string {
   return `${ALCHEMY_IMAGES}/recipes/${recipeId}.png`
