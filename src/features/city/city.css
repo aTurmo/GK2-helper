@@ -45,6 +45,15 @@
   border-color: var(--accent);
 }
 
+.site-list__item[data-done='true'] {
+  color: var(--muted);
+}
+
+.site-list__done {
+  margin-left: auto;
+  color: #5a9e4b;
+}
+
 .site-list__number {
   min-width: 1.6rem;
   color: var(--muted);
@@ -85,9 +94,15 @@
   cursor: pointer;
 }
 
+.city-map__pin[data-done='true'] {
+  background: #4f7a43;
+  opacity: 0.75;
+}
+
 .city-map__pin:hover,
 .city-map__pin[aria-pressed='true'] {
   z-index: 1;
+  opacity: 1;
   color: #23211d;
   background: var(--accent);
 }
@@ -99,11 +114,33 @@
   border-radius: 0.5rem;
 }
 
+.site-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
 .site-panel__title {
   margin: 0;
-  padding: 0.75rem 1rem;
   font-size: 1.15rem;
-  border-bottom: 1px solid var(--border);
+}
+
+.site-panel__done {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.site-panel__done input {
+  width: 1.2rem;
+  height: 1.2rem;
+  accent-color: var(--accent);
+  cursor: pointer;
 }
 
 .site-panel__options {

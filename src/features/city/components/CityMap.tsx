@@ -4,35 +4,38 @@ import { cityMapImage } from '../images'
 
 type CityMapProps = {
   sites: readonly Site[]
-  selectedSiteNumber: number
+  selectedSiteId: string
+  doneSiteIds: ReadonlySet<string>
   onSelect: (site: Site) => void
 }
 
-export function CityMap({ sites, selectedSiteNumber, onSelect }: CityMapProps) {
+export function CityMap({ sites, selectedSiteId, doneSiteIds, onSelect }: CityMapProps) {
   const selectedPin = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     selectedPin.current?.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' })
-  }, [selectedSiteNumber])
+  }, [selectedSiteId])
 
   return (
     <div className="city-map">
       <div className="city-map__canvas">
         <img src={cityMapImage()} alt="Carte de la ville" className="city-map__image" />
         {sites.map((site) => {
-          const isSelected = site.number === selectedSiteNumber
+          const isSelected = site.id === selectedSiteId
+          const isDone = doneSiteIds.has(site.id)
           return (
             <button
-              key={site.number}
+              key={site.id}
               ref={isSelected ? selectedPin : undefined}
               type="button"
               className="city-map__pin"
               style={{ left: site.position.x, top: site.position.y }}
+              data-done={isDone}
               aria-pressed={isSelected}
-              aria-label={`Site ${site.number} : ${site.name}`}
+              aria-label={`Site ${site.number} : ${site.name}${isDone ? ' (construit)' : ''}`}
               onClick={() => onSelect(site)}
             >
-              {site.number}
+              {isDone ? '✓' : site.number}
             </button>
           )
         })}

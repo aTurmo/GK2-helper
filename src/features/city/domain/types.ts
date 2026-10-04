@@ -12,6 +12,7 @@ export type MapPosition = {
 }
 
 export type Site = {
+  readonly id: string
   readonly number: number
   readonly name: string
   readonly position: MapPosition
