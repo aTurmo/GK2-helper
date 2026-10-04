@@ -1,15 +1,25 @@
 import { useState } from 'react'
+import { ingredientsUsedIn } from './alchemy/filterCombinations'
 import type { Recipe } from './alchemy/types'
 import { CombinationPanel } from './components/CombinationPanel'
+import { IngredientChecklist } from './components/IngredientChecklist'
 import { RecipeList } from './components/RecipeList'
 import { INGREDIENTS } from './data/ingredients'
 import { RECIPES } from './data/recipes'
+import { useAvailableCombinationsByRecipe } from './hooks/useAvailableCombinationsByRecipe'
 import { useCombinationsByRecipe } from './hooks/useCombinationsByRecipe'
+import { useExcludedIngredients } from './hooks/useExcludedIngredients'
 import { useRecipeSearch } from './hooks/useRecipeSearch'
 
 function App() {
   const { query, setQuery, matchingRecipes } = useRecipeSearch(RECIPES)
   const combinationsByRecipe = useCombinationsByRecipe(RECIPES, INGREDIENTS)
+  const { excludedIngredientIds, toggleIngredient, includeAllIngredients } =
+    useExcludedIngredients()
+  const availableCombinationsByRecipe = useAvailableCombinationsByRecipe(
+    combinationsByRecipe,
+    excludedIngredientIds,
+  )
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe>(RECIPES[0])
 
   return (
@@ -26,14 +36,23 @@ function App() {
         />
         <RecipeList
           recipes={matchingRecipes}
-          combinationsByRecipe={combinationsByRecipe}
+          combinationsByRecipe={availableCombinationsByRecipe}
           selectedRecipeId={selectedRecipe.id}
           onSelect={setSelectedRecipe}
         />
       </div>
       <CombinationPanel
         recipe={selectedRecipe}
-        combinations={combinationsByRecipe.get(selectedRecipe.id) ?? []}
+        combinations={availableCombinationsByRecipe.get(selectedRecipe.id) ?? []}
+      />
+      <IngredientChecklist
+        ingredients={ingredientsUsedIn(
+          combinationsByRecipe.get(selectedRecipe.id) ?? [],
+          INGREDIENTS,
+        )}
+        excludedIngredientIds={excludedIngredientIds}
+        onToggle={toggleIngredient}
+        onIncludeAll={includeAllIngredients}
       />
     </main>
   )
