@@ -55,7 +55,7 @@ export function ElementPalette({
         ))}
       </ul>
       <button type="button" className="element-palette__action" onClick={onRotate}>
-        Pivoter (R) · {placementRotation * 90}°
+        Pivoter (R) · position {placementRotation + 1}/4
       </button>
       <button
         type="button"

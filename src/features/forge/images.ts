@@ -1,3 +1,5 @@
+import type { Rotation } from './domain/types'
+
 const FORGE_IMAGES = `${import.meta.env.BASE_URL}images/forge`
 
 export function itemImage(itemId: string): string {
@@ -6,6 +8,10 @@ export function itemImage(itemId: string): string {
 
 export function floorImage(): string {
   return `${FORGE_IMAGES}/floor.jpg`
+}
+
+export function stationSprite(kindId: string, rotation: Rotation): string {
+  return `${FORGE_IMAGES}/stations/${kindId}-${rotation}.png`
 }
 
 export function elementImage(imageId: string): string {

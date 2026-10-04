@@ -53,7 +53,7 @@ export const ELEMENT_KINDS: readonly ElementKind[] = [
     name: "Banc d'Assemblage I",
     category: 'station',
     width: 6,
-    height: 4,
+    height: 6,
     energyUse: 1,
     extensionIds: ['auto-marteau', 'rouet'],
     maxExtensions: 1,

@@ -3,8 +3,16 @@ import { useDragToScroll } from '../../../hooks/useDragToScroll'
 import { findKind } from '../data/lookups'
 import { footprintOf } from '../domain/placement'
 import type { Tool } from '../domain/tool'
-import type { Floor, Footprint, PlacedElement, Placement, Rotation } from '../domain/types'
+import type {
+  ElementKind,
+  Floor,
+  Footprint,
+  PlacedElement,
+  Placement,
+  Rotation,
+} from '../domain/types'
 import { floorImage } from '../images'
+import { ElementVisual } from './ElementVisual'
 import { PlacedElementView } from './PlacedElementView'
 
 type Cell = {
@@ -101,6 +109,8 @@ export function ForgeGrid({
         })}
         {preview !== null && previewKind !== undefined && (
           <PlacementPreview
+            kind={previewKind}
+            rotation={preview.rotation}
             footprint={footprintOf(previewKind, preview)}
             floor={floor}
             isValid={isFree(preview)}
@@ -112,18 +122,18 @@ export function ForgeGrid({
 }
 
 type PlacementPreviewProps = {
+  kind: ElementKind
+  rotation: Rotation
   footprint: Footprint
   floor: Floor
   isValid: boolean
 }
 
-function PlacementPreview({ footprint, floor, isValid }: PlacementPreviewProps) {
+function PlacementPreview({ kind, rotation, footprint, floor, isValid }: PlacementPreviewProps) {
   return (
-    <span
-      className="forge-grid__preview"
-      data-valid={isValid}
-      style={areaStyle(footprint, floor)}
-    />
+    <span className="forge-grid__preview" data-valid={isValid} style={areaStyle(footprint, floor)}>
+      <ElementVisual kind={kind} rotation={rotation} floor={floor} />
+    </span>
   )
 }
 
