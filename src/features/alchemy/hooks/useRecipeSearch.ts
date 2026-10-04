@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import type { Recipe } from '../alchemy/types'
+import type { Recipe } from '../domain/types'
 
 export function useRecipeSearch(recipes: readonly Recipe[]) {
   const [query, setQuery] = useState('')

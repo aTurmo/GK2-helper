@@ -1,5 +1,6 @@
-import type { Ingredient } from '../alchemy/types'
+import type { Ingredient } from '../domain/types'
 import { type IngredientSortOrder, useIngredientSorting } from '../hooks/useIngredientSorting'
+import { ingredientImage } from '../images'
 
 type IngredientChecklistProps = {
   ingredients: readonly Ingredient[]
@@ -48,7 +49,7 @@ export function IngredientChecklist({
                 checked={!excludedIngredientIds.has(ingredient.id)}
                 onChange={() => onToggle(ingredient.id)}
               />
-              <img src={`/images/ingredients/${ingredient.id}.png`} alt={ingredient.name} />
+              <img src={ingredientImage(ingredient.id)} alt={ingredient.name} />
             </label>
           </li>
         ))}

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { withoutExcludedIngredients } from '../alchemy/filterCombinations'
-import type { Combination } from '../alchemy/types'
+import { withoutExcludedIngredients } from '../domain/filterCombinations'
+import type { Combination } from '../domain/types'
 
 export function useAvailableCombinationsByRecipe(
   combinationsByRecipe: ReadonlyMap<string, Combination[]>,

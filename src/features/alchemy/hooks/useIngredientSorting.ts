@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import type { Ingredient } from '../alchemy/types'
+import type { Ingredient } from '../domain/types'
 
 export type IngredientSortOrder = 'runes' | 'alphabetical'
 

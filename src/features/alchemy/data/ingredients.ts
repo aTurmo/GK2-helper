@@ -1,5 +1,5 @@
-import { runes } from '../alchemy/runes'
-import type { Ingredient } from '../alchemy/types'
+import { runes } from '../domain/runes'
+import type { Ingredient } from '../domain/types'
 
 export const INGREDIENTS: readonly Ingredient[] = [
   { id: 'argile', name: 'Argile', runes: runes(1, 0, 0) },

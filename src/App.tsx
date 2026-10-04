@@ -1,61 +1,31 @@
-import { useState } from 'react'
-import { ingredientsUsedIn } from './alchemy/filterCombinations'
-import { resolveCombinations } from './alchemy/resolveCombinations'
-import type { Recipe } from './alchemy/types'
-import { CombinationPanel } from './components/CombinationPanel'
-import { IngredientChecklist } from './components/IngredientChecklist'
-import { RecipeList } from './components/RecipeList'
-import { COMBINATIONS_BY_RECIPE } from './data/combinations'
-import { INGREDIENTS } from './data/ingredients'
-import { RECIPES } from './data/recipes'
-import { useAvailableCombinationsByRecipe } from './hooks/useAvailableCombinationsByRecipe'
-import { useExcludedIngredients } from './hooks/useExcludedIngredients'
-import { useRecipeSearch } from './hooks/useRecipeSearch'
+import type { ComponentType } from 'react'
+import { TabBar } from './components/TabBar'
+import { AlchemyTab } from './features/alchemy/AlchemyTab'
+import { useActiveTab } from './hooks/useActiveTab'
 
-const combinationsByRecipe = resolveCombinations(COMBINATIONS_BY_RECIPE, INGREDIENTS)
+type Tab = {
+  id: string
+  label: string
+  Content: ComponentType
+}
+
+const TABS: readonly Tab[] = [{ id: 'alchimie', label: 'Alchimie', Content: AlchemyTab }]
+
+const TAB_IDS = TABS.map((tab) => tab.id)
 
 function App() {
-  const { query, setQuery, matchingRecipes } = useRecipeSearch(RECIPES)
-  const { excludedIngredientIds, toggleIngredient, includeAllIngredients } =
-    useExcludedIngredients()
-  const availableCombinationsByRecipe = useAvailableCombinationsByRecipe(
-    combinationsByRecipe,
-    excludedIngredientIds,
-  )
-  const [selectedRecipe, setSelectedRecipe] = useState<Recipe>(RECIPES[0])
+  const { activeTabId, selectTab } = useActiveTab(TAB_IDS)
+  const activeTab = TABS.find((tab) => tab.id === activeTabId) ?? TABS[0]
 
   return (
     <main className="app">
-      <h1 className="app__title">Graveyard Keeper 2 – Alchimie</h1>
-      <div className="app__recipes">
-        <input
-          type="search"
-          className="search"
-          placeholder="Rechercher une recette…"
-          aria-label="Rechercher une recette"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-        />
-        <RecipeList
-          recipes={matchingRecipes}
-          combinationsByRecipe={availableCombinationsByRecipe}
-          selectedRecipeId={selectedRecipe.id}
-          onSelect={setSelectedRecipe}
-        />
+      <header className="app__header">
+        <h1 className="app__title">Graveyard Keeper 2</h1>
+        <TabBar tabs={TABS} activeTabId={activeTab.id} onSelect={selectTab} />
+      </header>
+      <div className="app__tab-content" role="tabpanel">
+        <activeTab.Content />
       </div>
-      <CombinationPanel
-        recipe={selectedRecipe}
-        combinations={availableCombinationsByRecipe.get(selectedRecipe.id) ?? []}
-      />
-      <IngredientChecklist
-        ingredients={ingredientsUsedIn(
-          combinationsByRecipe.get(selectedRecipe.id) ?? [],
-          INGREDIENTS,
-        )}
-        excludedIngredientIds={excludedIngredientIds}
-        onToggle={toggleIngredient}
-        onIncludeAll={includeAllIngredients}
-      />
     </main>
   )
 }

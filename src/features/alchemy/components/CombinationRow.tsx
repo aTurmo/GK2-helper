@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
-import type { Combination } from '../alchemy/types'
+import type { Combination } from '../domain/types'
+import { ingredientImage } from '../images'
 
 export function CombinationRow({ combination }: { combination: Combination }) {
   return (
@@ -7,7 +8,7 @@ export function CombinationRow({ combination }: { combination: Combination }) {
       {combination.map((ingredient, position) => (
         <Fragment key={`${position}-${ingredient.id}`}>
           {position > 0 && <span className="combination__plus">+</span>}
-          <img src={`/images/ingredients/${ingredient.id}.png`} alt={ingredient.name} />
+          <img src={ingredientImage(ingredient.id)} alt={ingredient.name} />
         </Fragment>
       ))}
     </li>

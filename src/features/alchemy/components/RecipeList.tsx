@@ -1,4 +1,5 @@
-import type { Combination, Recipe } from '../alchemy/types'
+import type { Combination, Recipe } from '../domain/types'
+import { recipeImage } from '../images'
 
 type RecipeListProps = {
   recipes: readonly Recipe[]
@@ -23,7 +24,7 @@ export function RecipeList({
             aria-pressed={recipe.id === selectedRecipeId}
             onClick={() => onSelect(recipe)}
           >
-            <img src={`/images/recipes/${recipe.id}.png`} alt={recipe.name} />
+            <img src={recipeImage(recipe.id)} alt={recipe.name} />
             <span className="recipe-list__count">
               {combinationsByRecipe.get(recipe.id)?.length ?? 0}
             </span>
