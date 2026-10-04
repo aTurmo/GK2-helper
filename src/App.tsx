@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 import { TabBar } from './components/TabBar'
 import { AlchemyTab } from './features/alchemy/AlchemyTab'
+import { ConstructionTab } from './features/construction/ConstructionTab'
 import { useActiveTab } from './hooks/useActiveTab'
 
 type Tab = {
@@ -9,7 +10,10 @@ type Tab = {
   Content: ComponentType
 }
 
-const TABS: readonly Tab[] = [{ id: 'alchimie', label: 'Alchimie', Content: AlchemyTab }]
+const TABS: readonly Tab[] = [
+  { id: 'alchimie', label: 'Alchimie', Content: AlchemyTab },
+  { id: 'construction', label: 'Construction', Content: ConstructionTab },
+]
 
 const TAB_IDS = TABS.map((tab) => tab.id)
 
