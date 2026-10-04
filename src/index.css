@@ -136,6 +136,21 @@ img {
   cursor: pointer;
 }
 
+.ingredient-checklist__sort {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1rem 0.75rem;
+  color: var(--muted);
+}
+
+.ingredient-checklist__sort select {
+  padding: 0.25rem 0.5rem;
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+}
+
 .ingredient-checklist__reset:disabled {
   border-color: var(--border);
   color: var(--muted);
