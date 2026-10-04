@@ -3,6 +3,7 @@ import { TabBar } from './components/TabBar'
 import { AlchemyTab } from './features/alchemy/AlchemyTab'
 import { CityTab } from './features/city/CityTab'
 import { ConstructionTab } from './features/construction/ConstructionTab'
+import { ForgeTab } from './features/forge/ForgeTab'
 import { useActiveTab } from './hooks/useActiveTab'
 
 type Tab = {
@@ -15,6 +16,7 @@ const TABS: readonly Tab[] = [
   { id: 'alchimie', label: 'Alchimie', Content: AlchemyTab },
   { id: 'construction', label: 'Construction', Content: ConstructionTab },
   { id: 'ville', label: 'Ville', Content: CityTab },
+  { id: 'forge', label: 'Forge', Content: ForgeTab },
 ]
 
 const TAB_IDS = TABS.map((tab) => tab.id)

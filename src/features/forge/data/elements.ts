@@ -1,0 +1,74 @@
+import type { ElementKind, Extension } from '../domain/types'
+
+export const GRID_COLUMNS = 26
+export const GRID_ROWS = 20
+
+export const EXTENSIONS: readonly Extension[] = [
+  { id: 'soufflet', name: 'Forge : Soufflet' },
+  { id: 'marteau', name: 'Forge : Marteau' },
+  { id: 'auto-marteau', name: "Banc d'Assemblage : Auto-Marteau" },
+  { id: 'rouet', name: "Banc d'Assemblage : Rouet" },
+]
+
+export const ELEMENT_KINDS: readonly ElementKind[] = [
+  {
+    id: 'convoyeur-a-bande',
+    name: 'Convoyeur à Bande',
+    category: 'conveyor',
+    width: 1,
+    height: 1,
+    energyUse: 1,
+    extensionIds: [],
+    maxExtensions: 0,
+  },
+  {
+    id: 'convoyeur-souterrain',
+    name: 'Convoyeur Souterrain',
+    category: 'conveyor',
+    width: 1,
+    height: 1,
+    energyUse: 2,
+    extensionIds: [],
+    maxExtensions: 0,
+  },
+  {
+    id: 'separateur-de-convoyeur',
+    name: 'Séparateur de Convoyeur',
+    category: 'conveyor',
+    width: 1,
+    height: 1,
+    energyUse: 0,
+    extensionIds: [],
+    maxExtensions: 0,
+  },
+  {
+    id: 'forge-1',
+    name: 'Forge I',
+    category: 'station',
+    width: 3,
+    height: 3,
+    energyUse: 1,
+    extensionIds: ['soufflet', 'marteau'],
+    maxExtensions: 2,
+  },
+  {
+    id: 'banc-d-assemblage-1',
+    name: "Banc d'Assemblage I",
+    category: 'station',
+    width: 3,
+    height: 2,
+    energyUse: 1,
+    extensionIds: ['auto-marteau', 'rouet'],
+    maxExtensions: 1,
+  },
+  {
+    id: 'carrousel-a-zombies',
+    name: 'Carrousel à Zombies',
+    category: 'energy',
+    width: 3,
+    height: 3,
+    energyUse: 0,
+    extensionIds: [],
+    maxExtensions: 0,
+  },
+]
