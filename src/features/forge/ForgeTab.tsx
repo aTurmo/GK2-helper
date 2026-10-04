@@ -9,7 +9,7 @@ import { findKind } from './data/lookups'
 import { energyBalance } from './domain/energy'
 import { nextRotation } from './domain/placement'
 import { SELECT_TOOL, type Tool } from './domain/tool'
-import type { Rotation } from './domain/types'
+import type { Placement, Rotation } from './domain/types'
 import { useForgeLayout } from './hooks/useForgeLayout'
 import './forge.css'
 
@@ -23,10 +23,26 @@ export function ForgeTab() {
   const selectedKind = selectedElement && findKind(selectedElement.kindId)
 
   function rotate() {
-    if (tool.mode === 'place') {
+    if (tool.mode === 'place' || tool.mode === 'move') {
       setPlacementRotation(nextRotation)
     } else if (selectedElementId !== null) {
       forge.rotateElement(selectedElementId)
+    }
+  }
+
+  function startMoving(elementId: string) {
+    const element = layout.elements.find((candidate) => candidate.id === elementId)
+    if (element === undefined) return
+    setPlacementRotation(element.rotation)
+    setTool({ mode: 'move', elementId })
+  }
+
+  function dropElement(placement: Placement) {
+    if (tool.mode === 'move') {
+      forge.moveElement(tool.elementId, placement)
+      setTool(SELECT_TOOL)
+    } else {
+      forge.placeElement(placement)
     }
   }
 
@@ -41,6 +57,9 @@ export function ForgeTab() {
         return
       }
       if (event.key === 'r' || event.key === 'R') rotate()
+      if ((event.key === 'm' || event.key === 'M') && selectedElementId !== null) {
+        startMoving(selectedElementId)
+      }
       if (event.key === 'Escape') setTool(SELECT_TOOL)
     }
     window.addEventListener('keydown', onKeyDown)
@@ -69,7 +88,7 @@ export function ForgeTab() {
         placementRotation={placementRotation}
         selectedElementId={selectedElementId}
         isFree={forge.isFree}
-        onPlace={forge.placeElement}
+        onPlace={dropElement}
         onElementClick={(elementId) =>
           tool.mode === 'erase' ? removeElement(elementId) : setSelectedElementId(elementId)
         }
@@ -87,6 +106,7 @@ export function ForgeTab() {
             kind={selectedKind}
             onChange={forge.replaceElement}
             onRotate={() => forge.rotateElement(selectedElement.id)}
+            onMove={() => startMoving(selectedElement.id)}
             onRemove={() => removeElement(selectedElement.id)}
           />
         ) : (

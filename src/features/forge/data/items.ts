@@ -19,6 +19,7 @@ export const ITEMS: readonly Item[] = [
   { id: 'kit-de-pierre', name: 'Kit de Pierre' },
   { id: 'lin', name: 'Lin' },
   { id: 'lingot-de-fer', name: 'Lingot de Fer' },
+  { id: 'marbre', name: 'Marbre' },
   { id: 'minerai-de-fer', name: 'Minerai de Fer' },
   { id: 'pierre', name: 'Pierre' },
   { id: 'recipients-en-verre', name: 'Récipients en Verre' },

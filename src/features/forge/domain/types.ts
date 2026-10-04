@@ -75,3 +75,10 @@ export type ForgeLayout = {
   readonly elements: readonly PlacedElement[]
   readonly zombieCount: number
 }
+
+export type Reserve = {
+  readonly id: string
+  readonly name: string
+  readonly itemId: string
+  readonly output: Footprint
+}

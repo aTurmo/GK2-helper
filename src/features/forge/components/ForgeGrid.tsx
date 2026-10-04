@@ -1,6 +1,8 @@
 import { useEffect, useState, type MouseEvent } from 'react'
 import { useDragToScroll } from '../../../hooks/useDragToScroll'
-import { findKind } from '../data/lookups'
+import { useMapZoom } from '../../../hooks/useMapZoom'
+import { findItem, findKind } from '../data/lookups'
+import { RESERVES } from '../data/reserves'
 import { footprintOf } from '../domain/placement'
 import type { Tool } from '../domain/tool'
 import type {
@@ -11,11 +13,11 @@ import type {
   Placement,
   Rotation,
 } from '../domain/types'
-import { floorImage } from '../images'
+import { floorImage, itemImage } from '../images'
 import { ElementVisual } from './ElementVisual'
 import { PlacedElementView } from './PlacedElementView'
 
-type Cell = {
+type PointerPosition = {
   readonly column: number
   readonly row: number
 }
@@ -26,7 +28,7 @@ type ForgeGridProps = {
   tool: Tool
   placementRotation: Rotation
   selectedElementId: string | null
-  isFree: (placement: Placement) => boolean
+  isFree: (placement: Placement, ignoredElementId?: string) => boolean
   onPlace: (placement: Placement) => void
   onElementClick: (elementId: string) => void
   onElementRemove: (elementId: string) => void
@@ -43,8 +45,11 @@ export function ForgeGrid({
   onElementClick,
   onElementRemove,
 }: ForgeGridProps) {
-  const [hoveredCell, setHoveredCell] = useState<Cell | null>(null)
+  const [pointer, setPointer] = useState<PointerPosition | null>(null)
   const { containerRef, dragHandlers } = useDragToScroll<HTMLDivElement>()
+  const { zoom, zoomIn, zoomOut, resetZoom } = useMapZoom(containerRef)
+  const canvasWidth = floor.columns * floor.cellWidth
+  const canvasHeight = floor.rows * floor.cellHeight
 
   useEffect(() => {
     const container = containerRef.current
@@ -53,69 +58,121 @@ export function ForgeGrid({
     container.scrollLeft = center.x - container.clientWidth / 2
     container.scrollTop = center.y - container.clientHeight / 2
   }, [containerRef, floor])
+  const movingElement =
+    tool.mode === 'move' ? elements.find((element) => element.id === tool.elementId) : undefined
+  const previewKind =
+    tool.mode === 'place' ? findKind(tool.kindId) : movingElement && findKind(movingElement.kindId)
   const preview =
-    tool.mode === 'place' && hoveredCell !== null
-      ? { kindId: tool.kindId, ...hoveredCell, rotation: placementRotation }
+    previewKind !== undefined && pointer !== null
+      ? centeredPlacement(previewKind, pointer, placementRotation)
       : null
-  const previewKind = preview === null ? undefined : findKind(preview.kindId)
 
-  function cellAt(event: MouseEvent<HTMLDivElement>): Cell {
+  function pointerAt(event: MouseEvent<HTMLDivElement>): PointerPosition {
     const bounds = event.currentTarget.getBoundingClientRect()
     return {
-      column: Math.floor((event.clientX - bounds.left) / floor.cellWidth),
-      row: Math.floor((event.clientY - bounds.top) / floor.cellHeight),
+      column: (event.clientX - bounds.left) / (floor.cellWidth * zoom),
+      row: (event.clientY - bounds.top) / (floor.cellHeight * zoom),
     }
   }
 
   return (
-    <div className="forge-grid" ref={containerRef} {...dragHandlers}>
-      <div
-        className="forge-grid__canvas"
-        style={{
-          width: floor.columns * floor.cellWidth,
-          height: floor.rows * floor.cellHeight,
-          backgroundImage: `url(${floorImage()})`,
-        }}
-        onMouseMove={(event) => setHoveredCell(cellAt(event))}
-        onMouseLeave={() => setHoveredCell(null)}
-        onClick={(event) => {
-          if (event.target === event.currentTarget && preview !== null) onPlace(preview)
-        }}
-      >
-        {floor.buildableAreas.map((area) => (
-          <span
-            key={`${area.column}-${area.row}`}
-            className="forge-grid__buildable"
+    <div className="forge-grid-frame">
+      <div className="forge-grid" ref={containerRef} {...dragHandlers}>
+        <div
+          className="forge-grid__sizer"
+          style={{ width: canvasWidth * zoom, height: canvasHeight * zoom }}
+        >
+          <div
+            className="forge-grid__canvas"
             style={{
-              ...areaStyle(area, floor),
-              backgroundSize: `${floor.cellWidth}px ${floor.cellHeight}px`,
+              width: canvasWidth,
+              height: canvasHeight,
+              backgroundImage: `url(${floorImage()})`,
+              transform: `scale(${zoom})`,
             }}
-          />
-        ))}
-        {elements.map((element) => {
-          const kind = findKind(element.kindId)
-          if (kind === undefined) return null
-          return (
-            <PlacedElementView
-              key={element.id}
-              element={element}
-              kind={kind}
-              floor={floor}
-              isSelected={element.id === selectedElementId}
-              onClick={() => onElementClick(element.id)}
-              onRemove={() => onElementRemove(element.id)}
-            />
-          )
-        })}
-        {preview !== null && previewKind !== undefined && (
-          <PlacementPreview
-            kind={previewKind}
-            rotation={preview.rotation}
-            footprint={footprintOf(previewKind, preview)}
-            floor={floor}
-            isValid={isFree(preview)}
-          />
-        )}
+            onMouseMove={(event) => setPointer(pointerAt(event))}
+            onMouseLeave={() => setPointer(null)}
+            onClick={(event) => {
+              if (event.target === event.currentTarget && preview !== null) onPlace(preview)
+            }}
+          >
+            {floor.buildableAreas.map((area) => (
+              <span
+                key={`${area.column}-${area.row}`}
+                className="forge-grid__buildable"
+                style={{
+                  ...areaStyle(area, floor),
+                  backgroundSize: `${floor.cellWidth}px ${floor.cellHeight}px`,
+                }}
+              />
+            ))}
+            {RESERVES.map((reserve) => (
+              <span
+                key={reserve.id}
+                className="forge-grid__reserve-output"
+                style={areaStyle(reserve.output, floor)}
+              >
+                <span className="forge-grid__reserve-arrow">▲</span>
+                <img
+                  src={itemImage(reserve.itemId)}
+                  alt={findItem(reserve.itemId)?.name ?? reserve.name}
+                  className="forge-grid__reserve-item"
+                />
+              </span>
+            ))}
+            {elements.map((element) => {
+              const kind = findKind(element.kindId)
+              if (kind === undefined) return null
+              return (
+                <PlacedElementView
+                  key={element.id}
+                  element={element}
+                  kind={kind}
+                  floor={floor}
+                  isSelected={element.id === selectedElementId}
+                  isMoving={element.id === movingElement?.id}
+                  onClick={() => onElementClick(element.id)}
+                  onRemove={() => onElementRemove(element.id)}
+                />
+              )
+            })}
+            {preview !== null && previewKind !== undefined && (
+              <PlacementPreview
+                kind={previewKind}
+                rotation={preview.rotation}
+                footprint={footprintOf(previewKind, preview)}
+                floor={floor}
+                isValid={isFree(preview, movingElement?.id)}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="zoom-controls">
+        <button
+          type="button"
+          className="zoom-controls__button"
+          aria-label="Dézoomer"
+          onClick={zoomOut}
+        >
+          −
+        </button>
+        <button
+          type="button"
+          className="zoom-controls__level"
+          title="Revenir à 100 %"
+          onClick={resetZoom}
+        >
+          {Math.round(zoom * 100)} %
+        </button>
+        <button
+          type="button"
+          className="zoom-controls__button"
+          aria-label="Zoomer"
+          onClick={zoomIn}
+        >
+          +
+        </button>
       </div>
     </div>
   )
@@ -135,6 +192,20 @@ function PlacementPreview({ kind, rotation, footprint, floor, isValid }: Placeme
       <ElementVisual kind={kind} rotation={rotation} floor={floor} />
     </span>
   )
+}
+
+function centeredPlacement(
+  kind: ElementKind,
+  pointer: PointerPosition,
+  rotation: Rotation,
+): Placement {
+  const size = footprintOf(kind, { kindId: kind.id, column: 0, row: 0, rotation })
+  return {
+    kindId: kind.id,
+    column: Math.round(pointer.column - size.width / 2),
+    row: Math.round(pointer.row - size.height / 2),
+    rotation,
+  }
 }
 
 function areaStyle(area: Footprint, floor: Floor) {

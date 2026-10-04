@@ -10,6 +10,7 @@ type ElementDetailsProps = {
   kind: ElementKind
   onChange: (element: PlacedElement) => void
   onRotate: () => void
+  onMove: () => void
   onRemove: () => void
 }
 
@@ -18,6 +19,7 @@ export function ElementDetails({
   kind,
   onChange,
   onRotate,
+  onMove,
   onRemove,
 }: ElementDetailsProps) {
   return (
@@ -32,6 +34,9 @@ export function ElementDetails({
             Pivoter
           </button>
         )}
+        <button type="button" className="forge-button" onClick={onMove}>
+          Déplacer (M)
+        </button>
         <button type="button" className="forge-button forge-button--danger" onClick={onRemove}>
           Supprimer
         </button>

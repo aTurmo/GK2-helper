@@ -37,6 +37,17 @@ export function useForgeLayout() {
     ])
   }
 
+  function moveElement(elementId: string, placement: Placement): void {
+    const element = elements.find((candidate) => candidate.id === elementId)
+    if (element === undefined || !isFree(placement, elementId)) return
+    replaceElement({
+      ...element,
+      column: placement.column,
+      row: placement.row,
+      rotation: placement.rotation,
+    })
+  }
+
   function removeElement(elementId: string): void {
     updateElements((previous) => previous.filter((element) => element.id !== elementId))
   }
@@ -67,6 +78,7 @@ export function useForgeLayout() {
     layout,
     isFree,
     placeElement,
+    moveElement,
     removeElement,
     rotateElement,
     replaceElement,

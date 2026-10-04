@@ -9,6 +9,7 @@ type PlacedElementViewProps = {
   kind: ElementKind
   floor: Floor
   isSelected: boolean
+  isMoving: boolean
   onClick: () => void
   onRemove: () => void
 }
@@ -18,6 +19,7 @@ export function PlacedElementView({
   kind,
   floor,
   isSelected,
+  isMoving,
   onClick,
   onRemove,
 }: PlacedElementViewProps) {
@@ -29,6 +31,7 @@ export function PlacedElementView({
       type="button"
       className={`placed-element placed-element--${kind.category}`}
       data-pass-through={kind.passThrough !== null}
+      data-moving={isMoving}
       style={{
         left: footprint.column * floor.cellWidth,
         top: footprint.row * floor.cellHeight,
