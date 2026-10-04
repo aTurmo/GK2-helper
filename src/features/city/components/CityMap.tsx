@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import type { Site } from '../domain/types'
+import { useDragToScroll } from '../hooks/useDragToScroll'
 import { cityMapImage } from '../images'
 
 type CityMapProps = {
@@ -11,15 +12,21 @@ type CityMapProps = {
 
 export function CityMap({ sites, selectedSiteId, doneSiteIds, onSelect }: CityMapProps) {
   const selectedPin = useRef<HTMLButtonElement>(null)
+  const { containerRef, dragHandlers } = useDragToScroll<HTMLDivElement>()
 
   useEffect(() => {
     selectedPin.current?.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' })
   }, [selectedSiteId])
 
   return (
-    <div className="city-map">
+    <div className="city-map" ref={containerRef} {...dragHandlers}>
       <div className="city-map__canvas">
-        <img src={cityMapImage()} alt="Carte de la ville" className="city-map__image" />
+        <img
+          src={cityMapImage()}
+          alt="Carte de la ville"
+          className="city-map__image"
+          draggable={false}
+        />
         {sites.map((site) => {
           const isSelected = site.id === selectedSiteId
           const isDone = doneSiteIds.has(site.id)

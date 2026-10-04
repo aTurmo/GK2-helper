@@ -67,6 +67,16 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 0.5rem;
+  cursor: grab;
+  user-select: none;
+}
+
+.city-map[data-dragging='true'] {
+  cursor: grabbing;
+}
+
+.city-map[data-dragging='true'] .city-map__pin {
+  cursor: grabbing;
 }
 
 .city-map__canvas {
