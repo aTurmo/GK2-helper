@@ -10,6 +10,23 @@ export function footprintOf(kind: ElementKind, placement: Placement): Footprint 
   }
 }
 
+export function occupiedAreas(kind: ElementKind, placement: Placement): readonly Footprint[] {
+  const footprint = footprintOf(kind, placement)
+  if (kind.passThrough === null) return [footprint]
+  const { offset, length } = kind.passThrough
+  const tail = offset + length
+  if (placement.rotation % 2 === 0) {
+    return [
+      { ...footprint, height: offset },
+      { ...footprint, row: footprint.row + tail, height: footprint.height - tail },
+    ]
+  }
+  return [
+    { ...footprint, width: offset },
+    { ...footprint, column: footprint.column + tail, width: footprint.width - tail },
+  ]
+}
+
 export function nextRotation(rotation: Rotation): Rotation {
   return ((rotation + 1) % 4) as Rotation
 }
@@ -23,12 +40,14 @@ export function canPlace(
 ): boolean {
   const kind = findKind(placement.kindId)
   if (kind === undefined) return false
-  const candidate = footprintOf(kind, placement)
-  if (!isBuildable(candidate, buildableAreas)) return false
+  const candidateAreas = occupiedAreas(kind, placement)
+  if (!candidateAreas.every((area) => isBuildable(area, buildableAreas))) return false
   return elements.every((element) => {
     if (element.id === ignoredElementId) return true
     const otherKind = findKind(element.kindId)
-    return otherKind === undefined || !overlaps(candidate, footprintOf(otherKind, element))
+    if (otherKind === undefined) return true
+    const otherAreas = occupiedAreas(otherKind, element)
+    return candidateAreas.every((area) => otherAreas.every((other) => !overlaps(area, other)))
   })
 }
 

@@ -1,5 +1,5 @@
 import { findRecipe } from '../data/lookups'
-import { footprintOf } from '../domain/placement'
+import { footprintOf, occupiedAreas } from '../domain/placement'
 import type { ElementKind, Floor, PlacedElement } from '../domain/types'
 import { itemImage } from '../images'
 import { ElementVisual } from './ElementVisual'
@@ -28,6 +28,7 @@ export function PlacedElementView({
     <button
       type="button"
       className={`placed-element placed-element--${kind.category}`}
+      data-pass-through={kind.passThrough !== null}
       style={{
         left: footprint.column * floor.cellWidth,
         top: footprint.row * floor.cellHeight,
@@ -42,6 +43,19 @@ export function PlacedElementView({
         onRemove()
       }}
     >
+      {kind.passThrough !== null &&
+        occupiedAreas(kind, { ...element, column: 0, row: 0 }).map((area) => (
+          <span
+            key={`${area.column}-${area.row}`}
+            className="placed-element__hit-area"
+            style={{
+              left: area.column * floor.cellWidth,
+              top: area.row * floor.cellHeight,
+              width: area.width * floor.cellWidth,
+              height: area.height * floor.cellHeight,
+            }}
+          />
+        ))}
       <ElementVisual kind={kind} rotation={element.rotation} floor={floor} />
       {recipe && (
         <img src={itemImage(recipe.output.itemId)} alt="" className="placed-element__recipe" />

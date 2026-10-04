@@ -17,16 +17,18 @@ export const ELEMENT_KINDS: readonly ElementKind[] = [
     energyUse: 1,
     extensionIds: [],
     maxExtensions: 0,
+    passThrough: null,
   },
   {
     id: 'convoyeur-souterrain',
     name: 'Convoyeur Souterrain',
     category: 'conveyor',
     width: 2,
-    height: 2,
+    height: 10,
     energyUse: 2,
     extensionIds: [],
     maxExtensions: 0,
+    passThrough: { offset: 4, length: 2 },
   },
   {
     id: 'separateur-de-convoyeur',
@@ -37,6 +39,7 @@ export const ELEMENT_KINDS: readonly ElementKind[] = [
     energyUse: 0,
     extensionIds: [],
     maxExtensions: 0,
+    passThrough: null,
   },
   {
     id: 'forge-1',
@@ -47,6 +50,7 @@ export const ELEMENT_KINDS: readonly ElementKind[] = [
     energyUse: 1,
     extensionIds: ['soufflet', 'marteau'],
     maxExtensions: 2,
+    passThrough: null,
   },
   {
     id: 'banc-d-assemblage-1',
@@ -57,5 +61,6 @@ export const ELEMENT_KINDS: readonly ElementKind[] = [
     energyUse: 1,
     extensionIds: ['auto-marteau', 'rouet'],
     maxExtensions: 1,
+    passThrough: null,
   },
 ]

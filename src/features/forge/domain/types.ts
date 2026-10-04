@@ -36,6 +36,12 @@ export type ElementKind = {
   readonly energyUse: number
   readonly extensionIds: readonly string[]
   readonly maxExtensions: number
+  readonly passThrough: PassThrough | null
+}
+
+export type PassThrough = {
+  readonly offset: number
+  readonly length: number
 }
 
 export type PlacedElement = {
