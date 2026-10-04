@@ -1,6 +1,6 @@
 import type { ElementKind, ForgeLayout } from './types'
 
-export const ENERGY_PER_ZOMBIE = 7
+const ENERGY_PER_ZOMBIE = 7
 
 export type EnergyBalance = {
   readonly production: number

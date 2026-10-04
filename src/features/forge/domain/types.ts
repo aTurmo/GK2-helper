@@ -25,7 +25,7 @@ export type Recipe = {
   readonly inputs: readonly ItemQuantity[]
 }
 
-export type ElementCategory = 'conveyor' | 'storage' | 'station'
+type ElementCategory = 'conveyor' | 'storage' | 'station'
 
 export type ElementKind = {
   readonly id: string
@@ -39,7 +39,7 @@ export type ElementKind = {
   readonly passThrough: PassThrough | null
 }
 
-export type PassThrough = {
+type PassThrough = {
   readonly offset: number
   readonly length: number
 }

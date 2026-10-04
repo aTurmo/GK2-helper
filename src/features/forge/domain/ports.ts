@@ -1,10 +1,10 @@
 import type { ElementKind, Footprint, Rotation } from './types'
 
-export type PortRole = 'input' | 'output'
+type PortRole = 'input' | 'output'
 
 export type Direction = 'up' | 'right' | 'down' | 'left'
 
-export type Port = {
+type Port = {
   readonly role: PortRole
   readonly flow: Direction
   readonly area: Footprint

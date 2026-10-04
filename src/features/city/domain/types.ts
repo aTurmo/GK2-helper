@@ -6,7 +6,7 @@ export type SiteOption = {
   readonly requirements: readonly MaterialRequirement[]
 }
 
-export type MapPosition = {
+type MapPosition = {
   readonly x: number
   readonly y: number
 }

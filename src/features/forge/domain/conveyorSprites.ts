@@ -1,7 +1,7 @@
 import { footprintOf, occupiedAreas } from './placement'
 import type { ElementKind, Footprint, Rotation } from './types'
 
-export type PlacedSprite = {
+type PlacedSprite = {
   readonly spriteId: string
   readonly transform: string
   readonly area: Footprint

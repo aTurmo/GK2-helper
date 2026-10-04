@@ -112,7 +112,8 @@ export function ForgeTab() {
         ) : (
           <p className="forge-panel__hint">
             Choisissez un élément à gauche puis cliquez sur la grille pour le placer. Clic droit
-            pour supprimer, R pour pivoter, Échap pour revenir à la sélection.
+            pour supprimer, R pour pivoter, M pour déplacer l'élément sélectionné, Échap pour
+            annuler.
           </p>
         )}
       </div>
