@@ -1,9 +1,165 @@
 :root {
   font-family: system-ui, sans-serif;
   color-scheme: light dark;
+  --surface: light-dark(#f4f1ea, #23211d);
+  --border: light-dark(#d6d0c4, #3d3a33);
+  --muted: light-dark(#6b665c, #a29c90);
+  --accent: #c9a227;
 }
 
 body {
   margin: 0;
   padding: 1rem;
+}
+
+img {
+  image-rendering: pixelated;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 1rem 1.5rem;
+  height: calc(100vh - 2rem);
+}
+
+.app__title {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.app__recipes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+.search {
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.recipe-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0.5rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+}
+
+.recipe-list__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.25rem 0.75rem 0.25rem 0.25rem;
+  font: inherit;
+  color: inherit;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.recipe-list__item:hover,
+.recipe-list__item[aria-pressed='true'] {
+  border-color: var(--accent);
+}
+
+.recipe-list__count {
+  margin-left: auto;
+  min-width: 2ch;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: right;
+}
+
+.combination-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.combination-panel__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.combination-panel__count,
+.combination-panel__empty {
+  color: var(--muted);
+}
+
+.combination-panel__count {
+  margin-left: auto;
+}
+
+.combination-panel__empty {
+  margin: 0;
+  padding: 1rem;
+}
+
+.rune-cost {
+  display: inline-flex;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.rune-cost__rune {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.combinations {
+  list-style: none;
+  margin: 0;
+  padding: 0 1rem;
+  overflow-y: auto;
+}
+
+.combination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.combination:last-child {
+  border-bottom: none;
+}
+
+.combination__plus {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    height: auto;
+  }
+
+  .recipe-list,
+  .combinations {
+    overflow-y: visible;
+  }
 }

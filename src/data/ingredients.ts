@@ -1,0 +1,31 @@
+import { runes } from '../alchemy/runes'
+import type { Ingredient } from '../alchemy/types'
+
+export const INGREDIENTS: readonly Ingredient[] = [
+  { id: 'argile', name: 'Argile', runes: runes(1, 0, 0) },
+  { id: 'sable', name: 'Sable', runes: runes(1, 0, 0) },
+  { id: 'chair', name: 'Chair', runes: runes(1, 0, 0) },
+  { id: 'pierre', name: 'Pierre', runes: runes(2, 0, 0) },
+  { id: 'minerai-de-fer', name: 'Minerai de Fer', runes: runes(3, 0, 0) },
+  { id: 'graisse-fondue', name: 'Graisse Fondue', runes: runes(3, 0, 0) },
+  { id: 'cire-d-abeille', name: "Cire d'Abeille", runes: runes(1, 2, 0) },
+  { id: 'charbon', name: 'Charbon', runes: runes(1, 2, 0) },
+  { id: 'pepite-d-or', name: "Pépite d'Or", runes: runes(2, 1, 0) },
+  { id: 'pepite-de-cuivre', name: 'Pépite de cuivre', runes: runes(2, 1, 0) },
+  { id: 'etain', name: 'Étain', runes: runes(2, 0, 1) },
+  { id: 'sel', name: 'Sel', runes: runes(1, 1, 1) },
+  { id: 'baie', name: 'Baie', runes: runes(0, 1, 0) },
+  { id: 'eau', name: 'Eau', runes: runes(0, 1, 0) },
+  { id: 'feuille', name: 'Feuille', runes: runes(0, 1, 0) },
+  { id: 'champignon-des-marais', name: 'Champignon des Marais', runes: runes(0, 2, 0) },
+  { id: 'farine', name: 'Farine', runes: runes(0, 2, 0) },
+  { id: 'fragrance', name: 'Fragrance', runes: runes(0, 3, 0) },
+  { id: 'cendres', name: 'Cendres', runes: runes(0, 1, 1) },
+  { id: 'tourbe', name: 'Tourbe', runes: runes(0, 1, 1) },
+  { id: 'cristal-bleu', name: 'Cristal Bleu', runes: runes(0, 1, 2) },
+  { id: 'miel', name: 'Miel', runes: runes(0, 2, 1) },
+  { id: 'sang', name: 'Sang', runes: runes(0, 0, 1) },
+  { id: 'glaire-de-zombie', name: 'Glaire de Zombie', runes: runes(0, 0, 2) },
+  { id: 'fleur-de-nuit', name: 'Fleur de Nuit', runes: runes(0, 0, 2) },
+  { id: 'alcool', name: 'Alcool', runes: runes(0, 0, 3) },
+]
