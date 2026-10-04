@@ -1,4 +1,4 @@
-import { minusButtonImage, plusButtonImage } from '../images'
+import { minusButtonImage, plusButtonImage } from './images'
 
 type QuantityStepperProps = {
   label: string

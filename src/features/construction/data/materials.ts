@@ -1,4 +1,4 @@
-import type { Material } from '../domain/types'
+import type { Material } from '../../material-planner/types'
 
 export const MATERIALS: readonly Material[] = [
   { id: 'arc-renforce', name: 'Arc Renforcé' },

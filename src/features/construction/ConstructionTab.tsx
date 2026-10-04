@@ -1,12 +1,13 @@
 import { useState } from 'react'
+import { MaterialsPanel } from '../material-planner/MaterialsPanel'
+import { totalMaterials } from '../material-planner/totalMaterials'
+import { useBuildPlan } from '../material-planner/useBuildPlan'
 import { BuildablePanel } from './components/BuildablePanel'
 import { BuildingList } from './components/BuildingList'
-import { MaterialsPanel } from './components/MaterialsPanel'
 import { BUILDINGS } from './data/buildings'
 import { MATERIALS } from './data/materials'
-import { totalMaterials } from './domain/totalMaterials'
 import type { Building } from './domain/types'
-import { useBuildPlan } from './hooks/useBuildPlan'
+import { materialImage } from './images'
 import './construction.css'
 
 export function ConstructionTab() {
@@ -22,11 +23,19 @@ export function ConstructionTab() {
       />
       <BuildablePanel
         building={selectedBuilding}
-        onAdd={(buildable) => addBuild(selectedBuilding, buildable)}
+        onAdd={(buildable) =>
+          addBuild({
+            key: `${selectedBuilding.id}/${buildable.id}`,
+            name: buildable.name,
+            detail: selectedBuilding.name,
+            requirements: buildable.requirements,
+          })
+        }
       />
       <MaterialsPanel
         plannedBuilds={plannedBuilds}
         materialTotals={totalMaterials(plannedBuilds, MATERIALS)}
+        materialImage={materialImage}
         onChangeCount={changeCount}
         onClear={clearPlan}
       />

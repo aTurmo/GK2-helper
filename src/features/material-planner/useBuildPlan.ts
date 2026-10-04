@@ -1,17 +1,16 @@
 import { useState } from 'react'
-import type { Buildable, Building, PlannedBuild } from '../domain/types'
+import type { PlannableItem, PlannedBuild } from './types'
 
 export function useBuildPlan() {
   const [plannedBuilds, setPlannedBuilds] = useState<readonly PlannedBuild[]>([])
 
-  function addBuild(building: Building, buildable: Buildable) {
-    const key = `${building.id}/${buildable.id}`
+  function addBuild(item: PlannableItem) {
     setPlannedBuilds((previous) =>
-      previous.some((planned) => planned.key === key)
+      previous.some((planned) => planned.key === item.key)
         ? previous.map((planned) =>
-            planned.key === key ? { ...planned, count: planned.count + 1 } : planned,
+            planned.key === item.key ? { ...planned, count: planned.count + 1 } : planned,
           )
-        : [...previous, { key, building, buildable, count: 1 }],
+        : [...previous, { ...item, count: 1 }],
     )
   }
 

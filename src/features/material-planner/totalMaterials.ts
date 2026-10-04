@@ -5,8 +5,8 @@ export function totalMaterials(
   materials: readonly Material[],
 ): MaterialTotal[] {
   const quantities = new Map<string, number>()
-  for (const { buildable, count } of plannedBuilds) {
-    for (const { materialId, quantity } of buildable.requirements) {
+  for (const { requirements, count } of plannedBuilds) {
+    for (const { materialId, quantity } of requirements) {
       quantities.set(materialId, (quantities.get(materialId) ?? 0) + quantity * count)
     }
   }

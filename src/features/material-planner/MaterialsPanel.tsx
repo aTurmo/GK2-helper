@@ -1,10 +1,11 @@
-import type { MaterialTotal, PlannedBuild } from '../domain/types'
-import { materialImage } from '../images'
 import { QuantityStepper } from './QuantityStepper'
+import type { MaterialTotal, PlannedBuild } from './types'
+import './material-planner.css'
 
 type MaterialsPanelProps = {
   plannedBuilds: readonly PlannedBuild[]
   materialTotals: readonly MaterialTotal[]
+  materialImage: (materialId: string) => string
   onChangeCount: (key: string, count: number) => void
   onClear: () => void
 }
@@ -12,6 +13,7 @@ type MaterialsPanelProps = {
 export function MaterialsPanel({
   plannedBuilds,
   materialTotals,
+  materialImage,
   onChangeCount,
   onClear,
 }: MaterialsPanelProps) {
@@ -36,11 +38,11 @@ export function MaterialsPanel({
             {plannedBuilds.map((planned) => (
               <li key={planned.key} className="planned-build">
                 <span className="planned-build__name">
-                  {planned.buildable.name}
-                  <span className="planned-build__building">{planned.building.name}</span>
+                  {planned.name}
+                  <span className="planned-build__detail">{planned.detail}</span>
                 </span>
                 <QuantityStepper
-                  label={planned.buildable.name}
+                  label={planned.name}
                   value={planned.count}
                   onChange={(count) => onChangeCount(planned.key, count)}
                 />

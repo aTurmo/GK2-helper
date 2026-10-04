@@ -42,8 +42,7 @@
   color: var(--muted);
 }
 
-.buildable-panel,
-.materials-panel {
+.buildable-panel {
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -87,125 +86,6 @@
   display: block;
 }
 
-.materials-panel__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.materials-panel__title {
-  margin: 0;
-  font-size: 1.25rem;
-}
-
-.materials-panel__clear {
-  padding: 0.35rem 0.75rem;
-  font: inherit;
-  color: inherit;
-  background: transparent;
-  border: 1px solid var(--accent);
-  border-radius: 0.375rem;
-  cursor: pointer;
-}
-
-.materials-panel__clear:disabled {
-  border-color: var(--border);
-  color: var(--muted);
-  cursor: default;
-}
-
-.materials-panel__empty {
-  margin: 0;
-  padding: 1rem;
-  color: var(--muted);
-}
-
-.materials-panel__content {
-  overflow-y: auto;
-}
-
-.planned-builds,
-.material-totals {
-  list-style: none;
-  margin: 0;
-  padding: 0.5rem 1rem;
-}
-
-.planned-builds {
-  border-bottom: 1px solid var(--border);
-}
-
-.planned-build {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.35rem 0;
-}
-
-.planned-build__name {
-  display: flex;
-  flex-direction: column;
-  font-weight: 600;
-}
-
-.planned-build__building {
-  font-size: 0.8rem;
-  font-weight: 400;
-  color: var(--muted);
-}
-
-.quantity-stepper {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  flex: none;
-}
-
-.quantity-stepper__button {
-  display: block;
-  padding: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.quantity-stepper__button img {
-  display: block;
-}
-
-.quantity-stepper__input {
-  width: 3.5rem;
-  padding: 0.3rem;
-  font: inherit;
-  text-align: center;
-  border: 1px solid var(--border);
-  border-radius: 0.375rem;
-}
-
-.material-total {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.2rem 0;
-}
-
-.material-total__icon {
-  width: 34px;
-  height: 34px;
-}
-
-.material-total__name {
-  flex: 1;
-}
-
-.material-total__quantity {
-  font-weight: 700;
-}
-
 @media (max-width: 900px) {
   .construction-tab {
     grid-template-columns: 1fr;
@@ -213,8 +93,7 @@
   }
 
   .building-list,
-  .buildable-panel__list,
-  .materials-panel__content {
+  .buildable-panel__list {
     overflow-y: visible;
   }
 }
