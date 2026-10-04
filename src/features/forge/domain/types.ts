@@ -25,7 +25,7 @@ export type Recipe = {
   readonly inputs: readonly ItemQuantity[]
 }
 
-export type ElementCategory = 'conveyor' | 'station' | 'energy'
+export type ElementCategory = 'conveyor' | 'station'
 
 export type ElementKind = {
   readonly id: string
@@ -46,7 +46,6 @@ export type PlacedElement = {
   readonly rotation: Rotation
   readonly extensionIds: readonly string[]
   readonly recipeId: string | null
-  readonly zombieCount: number
 }
 
 export type Placement = Pick<PlacedElement, 'kindId' | 'column' | 'row' | 'rotation'>
@@ -56,4 +55,17 @@ export type Footprint = {
   readonly row: number
   readonly width: number
   readonly height: number
+}
+
+export type Floor = {
+  readonly columns: number
+  readonly rows: number
+  readonly cellWidth: number
+  readonly cellHeight: number
+  readonly buildableAreas: readonly Footprint[]
+}
+
+export type ForgeLayout = {
+  readonly elements: readonly PlacedElement[]
+  readonly zombieCount: number
 }

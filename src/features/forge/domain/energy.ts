@@ -1,4 +1,4 @@
-import type { ElementKind, PlacedElement } from './types'
+import type { ElementKind, ForgeLayout } from './types'
 
 export const ENERGY_PER_ZOMBIE = 7
 
@@ -8,16 +8,12 @@ export type EnergyBalance = {
 }
 
 export function energyBalance(
-  elements: readonly PlacedElement[],
+  layout: ForgeLayout,
   findKind: (kindId: string) => ElementKind | undefined,
 ): EnergyBalance {
-  let production = 0
-  let consumption = 0
-  for (const element of elements) {
-    const kind = findKind(element.kindId)
-    if (kind === undefined) continue
-    consumption += kind.energyUse
-    if (kind.category === 'energy') production += element.zombieCount * ENERGY_PER_ZOMBIE
-  }
-  return { production, consumption }
+  const consumption = layout.elements.reduce(
+    (total, element) => total + (findKind(element.kindId)?.energyUse ?? 0),
+    0,
+  )
+  return { production: layout.zombieCount * ENERGY_PER_ZOMBIE, consumption }
 }

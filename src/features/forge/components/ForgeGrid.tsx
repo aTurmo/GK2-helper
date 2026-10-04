@@ -1,8 +1,10 @@
-import { useState, type MouseEvent } from 'react'
+import { useEffect, useState, type MouseEvent } from 'react'
+import { useDragToScroll } from '../../../hooks/useDragToScroll'
 import { findKind } from '../data/lookups'
-import { footprintOf, type GridSize } from '../domain/placement'
+import { footprintOf } from '../domain/placement'
 import type { Tool } from '../domain/tool'
-import type { PlacedElement, Placement, Rotation } from '../domain/types'
+import type { Floor, Footprint, PlacedElement, Placement, Rotation } from '../domain/types'
+import { floorImage } from '../images'
 import { PlacedElementView } from './PlacedElementView'
 
 type Cell = {
@@ -12,8 +14,7 @@ type Cell = {
 
 type ForgeGridProps = {
   elements: readonly PlacedElement[]
-  grid: GridSize
-  cellSize: number
+  floor: Floor
   tool: Tool
   placementRotation: Rotation
   selectedElementId: string | null
@@ -25,8 +26,7 @@ type ForgeGridProps = {
 
 export function ForgeGrid({
   elements,
-  grid,
-  cellSize,
+  floor,
   tool,
   placementRotation,
   selectedElementId,
@@ -36,6 +36,15 @@ export function ForgeGrid({
   onElementRemove,
 }: ForgeGridProps) {
   const [hoveredCell, setHoveredCell] = useState<Cell | null>(null)
+  const { containerRef, dragHandlers } = useDragToScroll<HTMLDivElement>()
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (container === null) return
+    const center = buildableCenter(floor)
+    container.scrollLeft = center.x - container.clientWidth / 2
+    container.scrollTop = center.y - container.clientHeight / 2
+  }, [containerRef, floor])
   const preview =
     tool.mode === 'place' && hoveredCell !== null
       ? { kindId: tool.kindId, ...hoveredCell, rotation: placementRotation }
@@ -45,19 +54,19 @@ export function ForgeGrid({
   function cellAt(event: MouseEvent<HTMLDivElement>): Cell {
     const bounds = event.currentTarget.getBoundingClientRect()
     return {
-      column: Math.floor((event.clientX - bounds.left) / cellSize),
-      row: Math.floor((event.clientY - bounds.top) / cellSize),
+      column: Math.floor((event.clientX - bounds.left) / floor.cellWidth),
+      row: Math.floor((event.clientY - bounds.top) / floor.cellHeight),
     }
   }
 
   return (
-    <div className="forge-grid">
+    <div className="forge-grid" ref={containerRef} {...dragHandlers}>
       <div
         className="forge-grid__canvas"
         style={{
-          width: grid.columns * cellSize,
-          height: grid.rows * cellSize,
-          backgroundSize: `${cellSize}px ${cellSize}px`,
+          width: floor.columns * floor.cellWidth,
+          height: floor.rows * floor.cellHeight,
+          backgroundImage: `url(${floorImage()})`,
         }}
         onMouseMove={(event) => setHoveredCell(cellAt(event))}
         onMouseLeave={() => setHoveredCell(null)}
@@ -65,6 +74,16 @@ export function ForgeGrid({
           if (event.target === event.currentTarget && preview !== null) onPlace(preview)
         }}
       >
+        {floor.buildableAreas.map((area) => (
+          <span
+            key={`${area.column}-${area.row}`}
+            className="forge-grid__buildable"
+            style={{
+              ...areaStyle(area, floor),
+              backgroundSize: `${floor.cellWidth}px ${floor.cellHeight}px`,
+            }}
+          />
+        ))}
         {elements.map((element) => {
           const kind = findKind(element.kindId)
           if (kind === undefined) return null
@@ -73,7 +92,7 @@ export function ForgeGrid({
               key={element.id}
               element={element}
               kind={kind}
-              cellSize={cellSize}
+              floor={floor}
               isSelected={element.id === selectedElementId}
               onClick={() => onElementClick(element.id)}
               onRemove={() => onElementRemove(element.id)}
@@ -83,7 +102,7 @@ export function ForgeGrid({
         {preview !== null && previewKind !== undefined && (
           <PlacementPreview
             footprint={footprintOf(previewKind, preview)}
-            cellSize={cellSize}
+            floor={floor}
             isValid={isFree(preview)}
           />
         )}
@@ -93,22 +112,37 @@ export function ForgeGrid({
 }
 
 type PlacementPreviewProps = {
-  footprint: ReturnType<typeof footprintOf>
-  cellSize: number
+  footprint: Footprint
+  floor: Floor
   isValid: boolean
 }
 
-function PlacementPreview({ footprint, cellSize, isValid }: PlacementPreviewProps) {
+function PlacementPreview({ footprint, floor, isValid }: PlacementPreviewProps) {
   return (
     <span
       className="forge-grid__preview"
       data-valid={isValid}
-      style={{
-        left: footprint.column * cellSize,
-        top: footprint.row * cellSize,
-        width: footprint.width * cellSize,
-        height: footprint.height * cellSize,
-      }}
+      style={areaStyle(footprint, floor)}
     />
   )
+}
+
+function areaStyle(area: Footprint, floor: Floor) {
+  return {
+    left: area.column * floor.cellWidth,
+    top: area.row * floor.cellHeight,
+    width: area.width * floor.cellWidth,
+    height: area.height * floor.cellHeight,
+  }
+}
+
+function buildableCenter(floor: Floor) {
+  const left = Math.min(...floor.buildableAreas.map((area) => area.column))
+  const right = Math.max(...floor.buildableAreas.map((area) => area.column + area.width))
+  const top = Math.min(...floor.buildableAreas.map((area) => area.row))
+  const bottom = Math.max(...floor.buildableAreas.map((area) => area.row + area.height))
+  return {
+    x: ((left + right) / 2) * floor.cellWidth,
+    y: ((top + bottom) / 2) * floor.cellHeight,
+  }
 }

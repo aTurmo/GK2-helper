@@ -4,6 +4,7 @@ import { ElementPalette } from './components/ElementPalette'
 import { EnergySummary } from './components/EnergySummary'
 import { ForgeGrid } from './components/ForgeGrid'
 import { ELEMENT_KINDS } from './data/elements'
+import { FLOOR } from './data/floor'
 import { findKind } from './data/lookups'
 import { energyBalance } from './domain/energy'
 import { nextRotation } from './domain/placement'
@@ -12,10 +13,9 @@ import type { Rotation } from './domain/types'
 import { useForgeLayout } from './hooks/useForgeLayout'
 import './forge.css'
 
-const CELL_SIZE = 32
-
 export function ForgeTab() {
-  const layout = useForgeLayout()
+  const forge = useForgeLayout()
+  const { layout } = forge
   const [tool, setTool] = useState<Tool>(SELECT_TOOL)
   const [placementRotation, setPlacementRotation] = useState<Rotation>(0)
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null)
@@ -26,12 +26,12 @@ export function ForgeTab() {
     if (tool.mode === 'place') {
       setPlacementRotation(nextRotation)
     } else if (selectedElementId !== null) {
-      layout.rotateElement(selectedElementId)
+      forge.rotateElement(selectedElementId)
     }
   }
 
   function removeElement(elementId: string) {
-    layout.removeElement(elementId)
+    forge.removeElement(elementId)
     if (elementId === selectedElementId) setSelectedElementId(null)
   }
 
@@ -57,33 +57,36 @@ export function ForgeTab() {
         onRotate={rotate}
         onClear={() => {
           if (window.confirm('Effacer toute la forge ?')) {
-            layout.clearLayout()
+            forge.clearElements()
             setSelectedElementId(null)
           }
         }}
       />
       <ForgeGrid
         elements={layout.elements}
-        grid={layout.grid}
-        cellSize={CELL_SIZE}
+        floor={FLOOR}
         tool={tool}
         placementRotation={placementRotation}
         selectedElementId={selectedElementId}
-        isFree={layout.isFree}
-        onPlace={layout.placeElement}
+        isFree={forge.isFree}
+        onPlace={forge.placeElement}
         onElementClick={(elementId) =>
           tool.mode === 'erase' ? removeElement(elementId) : setSelectedElementId(elementId)
         }
         onElementRemove={removeElement}
       />
       <div className="forge-panel">
-        <EnergySummary {...energyBalance(layout.elements, findKind)} />
+        <EnergySummary
+          {...energyBalance(layout, findKind)}
+          zombieCount={layout.zombieCount}
+          onChangeZombieCount={forge.changeZombieCount}
+        />
         {selectedElement && selectedKind ? (
           <ElementDetails
             element={selectedElement}
             kind={selectedKind}
-            onChange={layout.replaceElement}
-            onRotate={() => layout.rotateElement(selectedElement.id)}
+            onChange={forge.replaceElement}
+            onRotate={() => forge.rotateElement(selectedElement.id)}
             onRemove={() => removeElement(selectedElement.id)}
           />
         ) : (

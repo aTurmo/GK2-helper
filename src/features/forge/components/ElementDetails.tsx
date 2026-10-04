@@ -1,7 +1,5 @@
-import { QuantityStepper } from '../../material-planner/QuantityStepper'
 import { RECIPES } from '../data/recipes'
 import { findExtension, findRecipe } from '../data/lookups'
-import { ENERGY_PER_ZOMBIE } from '../domain/energy'
 import { availableRecipes, withExtensionToggled } from '../domain/stations'
 import type { ElementKind, PlacedElement } from '../domain/types'
 import { elementImage } from '../images'
@@ -38,19 +36,6 @@ export function ElementDetails({
       </div>
       {kind.category === 'station' && (
         <StationSettings element={element} kind={kind} onChange={onChange} />
-      )}
-      {kind.category === 'energy' && (
-        <div className="element-details__zombies">
-          <span>Zombies</span>
-          <QuantityStepper
-            label="zombie"
-            value={element.zombieCount}
-            onChange={(zombieCount) =>
-              onChange({ ...element, zombieCount: Math.max(0, zombieCount) })
-            }
-          />
-          <span>⚙ {element.zombieCount * ENERGY_PER_ZOMBIE}</span>
-        </div>
       )}
     </section>
   )

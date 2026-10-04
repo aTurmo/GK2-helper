@@ -1,10 +1,5 @@
 import type { ElementKind, Footprint, PlacedElement, Placement, Rotation } from './types'
 
-export type GridSize = {
-  readonly columns: number
-  readonly rows: number
-}
-
 export function footprintOf(kind: ElementKind, placement: Placement): Footprint {
   const isSideways = placement.rotation % 2 === 1
   return {
@@ -23,13 +18,13 @@ export function canPlace(
   placement: Placement,
   elements: readonly PlacedElement[],
   findKind: (kindId: string) => ElementKind | undefined,
-  grid: GridSize,
+  buildableAreas: readonly Footprint[],
   ignoredElementId?: string,
 ): boolean {
   const kind = findKind(placement.kindId)
   if (kind === undefined) return false
   const candidate = footprintOf(kind, placement)
-  if (!isInsideGrid(candidate, grid)) return false
+  if (!isBuildable(candidate, buildableAreas)) return false
   return elements.every((element) => {
     if (element.id === ignoredElementId) return true
     const otherKind = findKind(element.kindId)
@@ -37,13 +32,14 @@ export function canPlace(
   })
 }
 
-function isInsideGrid(footprint: Footprint, grid: GridSize): boolean {
-  return (
-    footprint.column >= 0 &&
-    footprint.row >= 0 &&
-    footprint.column + footprint.width <= grid.columns &&
-    footprint.row + footprint.height <= grid.rows
-  )
+function isBuildable(footprint: Footprint, buildableAreas: readonly Footprint[]): boolean {
+  for (let row = footprint.row; row < footprint.row + footprint.height; row++) {
+    for (let column = footprint.column; column < footprint.column + footprint.width; column++) {
+      const cell = { column, row, width: 1, height: 1 }
+      if (!buildableAreas.some((area) => overlaps(cell, area))) return false
+    }
+  }
+  return true
 }
 
 function overlaps(a: Footprint, b: Footprint): boolean {

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import type { Site } from '../domain/types'
-import { useDragToScroll } from '../hooks/useDragToScroll'
+import { useDragToScroll } from '../../../hooks/useDragToScroll'
 import { cityMapImage } from '../images'
 
 type CityMapProps = {

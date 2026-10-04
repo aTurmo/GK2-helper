@@ -1,37 +1,44 @@
 import { useEffect, useState } from 'react'
-import { GRID_COLUMNS, GRID_ROWS } from '../data/elements'
+import { FLOOR } from '../data/floor'
 import { findKind } from '../data/lookups'
 import { canPlace, nextRotation } from '../domain/placement'
-import type { PlacedElement, Placement, Rotation } from '../domain/types'
+import type { ForgeLayout, PlacedElement, Placement, Rotation } from '../domain/types'
 
 const STORAGE_KEY = 'gk2-helper:forge:layout'
-const GRID = { columns: GRID_COLUMNS, rows: GRID_ROWS }
+const EMPTY_LAYOUT: ForgeLayout = { elements: [], zombieCount: 0 }
 
 export function useForgeLayout() {
-  const [elements, setElements] = useState<readonly PlacedElement[]>(readLayout)
+  const [layout, setLayout] = useState<ForgeLayout>(readLayout)
+  const { elements } = layout
 
   useEffect(() => {
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(elements))
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(layout))
     } catch (error) {
       console.warn('Could not save the forge layout, it will be lost on reload.', error)
     }
-  }, [elements])
+  }, [layout])
+
+  function updateElements(
+    update: (previous: readonly PlacedElement[]) => readonly PlacedElement[],
+  ) {
+    setLayout((previous) => ({ ...previous, elements: update(previous.elements) }))
+  }
 
   function isFree(placement: Placement, ignoredElementId?: string): boolean {
-    return canPlace(placement, elements, findKind, GRID, ignoredElementId)
+    return canPlace(placement, elements, findKind, FLOOR.buildableAreas, ignoredElementId)
   }
 
   function placeElement(placement: Placement): void {
     if (!isFree(placement)) return
-    setElements((previous) => [
+    updateElements((previous) => [
       ...previous,
-      { ...placement, id: crypto.randomUUID(), extensionIds: [], recipeId: null, zombieCount: 0 },
+      { ...placement, id: crypto.randomUUID(), extensionIds: [], recipeId: null },
     ])
   }
 
   function removeElement(elementId: string): void {
-    setElements((previous) => previous.filter((element) => element.id !== elementId))
+    updateElements((previous) => previous.filter((element) => element.id !== elementId))
   }
 
   function rotateElement(elementId: string): void {
@@ -43,34 +50,43 @@ export function useForgeLayout() {
   }
 
   function replaceElement(updated: PlacedElement): void {
-    setElements((previous) =>
+    updateElements((previous) =>
       previous.map((element) => (element.id === updated.id ? updated : element)),
     )
   }
 
-  function clearLayout(): void {
-    setElements([])
+  function changeZombieCount(zombieCount: number): void {
+    setLayout((previous) => ({ ...previous, zombieCount: Math.max(0, zombieCount) }))
+  }
+
+  function clearElements(): void {
+    updateElements(() => [])
   }
 
   return {
-    elements,
-    grid: GRID,
+    layout,
     isFree,
     placeElement,
     removeElement,
     rotateElement,
     replaceElement,
-    clearLayout,
+    changeZombieCount,
+    clearElements,
   }
 }
 
-function readLayout(): readonly PlacedElement[] {
+function readLayout(): ForgeLayout {
   try {
-    const stored: unknown = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? '[]')
-    return Array.isArray(stored) ? stored.filter(isPlacedElement) : []
+    const stored: unknown = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? 'null')
+    if (typeof stored !== 'object' || stored === null || Array.isArray(stored)) return EMPTY_LAYOUT
+    const candidate = stored as Record<string, unknown>
+    return {
+      elements: Array.isArray(candidate.elements) ? candidate.elements.filter(isPlacedElement) : [],
+      zombieCount: typeof candidate.zombieCount === 'number' ? candidate.zombieCount : 0,
+    }
   } catch (error) {
     console.warn('Could not read the forge layout, starting empty.', error)
-    return []
+    return EMPTY_LAYOUT
   }
 }
 
@@ -85,8 +101,7 @@ function isPlacedElement(value: unknown): value is PlacedElement {
     isRotation(candidate.rotation) &&
     Array.isArray(candidate.extensionIds) &&
     candidate.extensionIds.every((id) => typeof id === 'string') &&
-    (candidate.recipeId === null || typeof candidate.recipeId === 'string') &&
-    typeof candidate.zombieCount === 'number'
+    (candidate.recipeId === null || typeof candidate.recipeId === 'string')
   )
 }
 
