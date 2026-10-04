@@ -1,0 +1,148 @@
+.city-tab {
+  display: grid;
+  grid-template-columns: 13rem 1fr 24rem;
+  grid-template-rows: minmax(0, 1fr);
+  gap: 1rem 1.5rem;
+  height: 100%;
+}
+
+.city-tab__center {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+  min-height: 0;
+}
+
+.site-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0.5rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  overflow-y: auto;
+}
+
+.site-list__item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.45rem 0.7rem;
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+  text-align: left;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.site-list__item:hover,
+.site-list__item[aria-pressed='true'] {
+  border-color: var(--accent);
+}
+
+.site-list__number {
+  min-width: 1.6rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+.city-map {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.city-map__canvas {
+  position: relative;
+  width: max-content;
+}
+
+.city-map__image {
+  display: block;
+}
+
+.city-map__pin {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  min-width: 1.9rem;
+  height: 1.9rem;
+  padding: 0 0.3rem;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  background: #7a2e1f;
+  border: 2px solid #f4e3c1;
+  border-radius: 999px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.5);
+  cursor: pointer;
+}
+
+.city-map__pin:hover,
+.city-map__pin[aria-pressed='true'] {
+  z-index: 1;
+  color: #23211d;
+  background: var(--accent);
+}
+
+.site-panel {
+  flex: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.site-panel__title {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  font-size: 1.15rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.site-panel__options {
+  list-style: none;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.site-panel__option {
+  display: block;
+  padding: 0;
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.site-panel__option:hover {
+  border-color: var(--accent);
+}
+
+.site-panel__option img {
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .city-tab {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .site-list {
+    overflow-y: visible;
+  }
+
+  .city-map {
+    max-height: 70vh;
+  }
+}
