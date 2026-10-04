@@ -42,6 +42,17 @@ export const ELEMENT_KINDS: readonly ElementKind[] = [
     passThrough: null,
   },
   {
+    id: 'caisson-de-convoyeur-1',
+    name: 'Caisson de Convoyeur I',
+    category: 'storage',
+    width: 2,
+    height: 2,
+    energyUse: 0,
+    extensionIds: [],
+    maxExtensions: 0,
+    passThrough: null,
+  },
+  {
     id: 'forge-1',
     name: 'Forge I',
     category: 'station',

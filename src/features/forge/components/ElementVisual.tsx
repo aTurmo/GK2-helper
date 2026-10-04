@@ -15,6 +15,25 @@ export function ElementVisual({ kind, rotation, floor }: ElementVisualProps) {
   if (kind.category === 'conveyor') {
     return <ConveyorVisual kind={kind} rotation={rotation} floor={floor} />
   }
+  if (kind.category === 'storage') {
+    return (
+      <span
+        className="element-visual__sprite-slot"
+        style={{
+          left: 0,
+          top: 0,
+          width: kind.width * floor.cellWidth,
+          height: kind.height * floor.cellHeight,
+        }}
+      >
+        <img
+          src={conveyorSpriteImage('conveyor-chest')}
+          alt=""
+          className="element-visual__native-sprite"
+        />
+      </span>
+    )
+  }
   return (
     <>
       <img

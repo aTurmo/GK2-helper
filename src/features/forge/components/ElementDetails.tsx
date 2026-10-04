@@ -27,9 +27,11 @@ export function ElementDetails({
         <h2 className="forge-panel__title">{kind.name}</h2>
       </header>
       <div className="element-details__actions">
-        <button type="button" className="forge-button" onClick={onRotate}>
-          Pivoter
-        </button>
+        {kind.category !== 'storage' && (
+          <button type="button" className="forge-button" onClick={onRotate}>
+            Pivoter
+          </button>
+        )}
         <button type="button" className="forge-button forge-button--danger" onClick={onRemove}>
           Supprimer
         </button>
