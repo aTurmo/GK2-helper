@@ -733,12 +733,30 @@ export const BUILDINGS: readonly Building[] = [
         ],
       },
       {
+        id: 'banc-d-assemblage-2',
+        name: "Banc d'Assemblage II",
+        requirements: [
+          { materialId: 'poutre-renforcee', quantity: 6 },
+          { materialId: 'engrenage-en-bronze', quantity: 8 },
+          { materialId: 'assemblage-sophistique', quantity: 6 },
+        ],
+      },
+      {
         id: 'banc-d-assemblage-auto-marteau',
         name: "Banc d'Assemblage : Auto-Marteau",
         requirements: [
           { materialId: 'engrenage-en-bronze', quantity: 2 },
           { materialId: 'assemblage-en-fer', quantity: 6 },
           { materialId: 'lingot-de-fer', quantity: 2 },
+        ],
+      },
+      {
+        id: 'banc-d-assemblage-rouet',
+        name: "Banc d'Assemblage : Rouet",
+        requirements: [
+          { materialId: 'engrenage-en-bronze', quantity: 2 },
+          { materialId: 'planche-de-bois', quantity: 4 },
+          { materialId: 'clous-en-fer', quantity: 4 },
         ],
       },
       {
