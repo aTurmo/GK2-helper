@@ -12,6 +12,7 @@ export const ITEMS: readonly Item[] = [
     id: 'fournitures-materiaux-de-construction-1',
     name: 'Fournitures : Matériaux de Construction I',
   },
+  { id: 'fournitures-outils-en-fer', name: 'Fournitures : Outils en Fer' },
   { id: 'fournitures-tissu', name: 'Fournitures : Tissu' },
   { id: 'kit-de-bois-1', name: 'Kit de Bois I' },
   { id: 'kit-de-construction-1', name: 'Kit de Construction I' },

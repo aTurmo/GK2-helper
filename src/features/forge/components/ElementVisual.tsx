@@ -1,4 +1,5 @@
 import { conveyorSprites } from '../domain/conveyorSprites'
+import { footprintOf } from '../domain/placement'
 import { stationPorts, type Direction } from '../domain/ports'
 import type { ElementKind, Floor, Rotation } from '../domain/types'
 import { conveyorSpriteImage, stationSprite } from '../images'
@@ -15,19 +16,20 @@ export function ElementVisual({ kind, rotation, floor }: ElementVisualProps) {
   if (kind.category === 'conveyor') {
     return <ConveyorVisual kind={kind} rotation={rotation} floor={floor} />
   }
-  if (kind.category === 'storage') {
+  if (kind.category === 'other') {
+    const footprint = footprintOf(kind, { kindId: kind.id, column: 0, row: 0, rotation })
     return (
       <span
         className="element-visual__sprite-slot"
         style={{
           left: 0,
           top: 0,
-          width: kind.width * floor.cellWidth,
-          height: kind.height * floor.cellHeight,
+          width: footprint.width * floor.cellWidth,
+          height: footprint.height * floor.cellHeight,
         }}
       >
         <img
-          src={conveyorSpriteImage('conveyor-chest')}
+          src={conveyorSpriteImage(kind.spriteIds[rotation % kind.spriteIds.length])}
           alt=""
           className="element-visual__native-sprite"
         />
@@ -37,7 +39,7 @@ export function ElementVisual({ kind, rotation, floor }: ElementVisualProps) {
   return (
     <>
       <img
-        src={stationSprite(kind.id, rotation)}
+        src={stationSprite(kind.spriteKindId, rotation)}
         alt=""
         className="element-visual__sprite"
         style={{
@@ -46,6 +48,7 @@ export function ElementVisual({ kind, rotation, floor }: ElementVisualProps) {
           height: kind.height * floor.cellHeight,
         }}
       />
+      {kind.tierLabel !== null && <span className="element-visual__tier">{kind.tierLabel}</span>}
       {stationPorts(kind, rotation).map((port, index) => (
         <span
           key={index}

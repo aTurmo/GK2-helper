@@ -3,7 +3,7 @@ import { useDragToScroll } from '../../../hooks/useDragToScroll'
 import { useMapZoom } from '../../../hooks/useMapZoom'
 import { findItem, findKind } from '../data/lookups'
 import { RESERVES } from '../data/reserves'
-import { footprintOf } from '../domain/placement'
+import { footprintOf, occupiedAreas } from '../domain/placement'
 import type { Tool } from '../domain/tool'
 import type {
   ElementKind,
@@ -190,6 +190,13 @@ function PlacementPreview({ kind, rotation, footprint, floor, isValid }: Placeme
   return (
     <span className="forge-grid__preview" data-valid={isValid} style={areaStyle(footprint, floor)}>
       <ElementVisual kind={kind} rotation={rotation} floor={floor} />
+      {occupiedAreas(kind, { kindId: kind.id, column: 0, row: 0, rotation }).map((area) => (
+        <span
+          key={`${area.column}-${area.row}`}
+          className="forge-grid__preview-area"
+          style={areaStyle(area, floor)}
+        />
+      ))}
     </span>
   )
 }

@@ -1,7 +1,11 @@
 import type { ElementKind, Footprint, PlacedElement, Placement, Rotation } from './types'
 
+export function isRotatable(kind: ElementKind): boolean {
+  return kind.category !== 'other' || kind.spriteIds.length > 1
+}
+
 export function footprintOf(kind: ElementKind, placement: Placement): Footprint {
-  const isSideways = placement.rotation % 2 === 1
+  const isSideways = isRotatable(kind) && placement.rotation % 2 === 1
   return {
     column: placement.column,
     row: placement.row,

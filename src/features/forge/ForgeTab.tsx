@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react'
 import { ElementDetails } from './components/ElementDetails'
+import { BuildCostPanel } from './components/BuildCostPanel'
 import { ElementPalette } from './components/ElementPalette'
 import { EnergySummary } from './components/EnergySummary'
 import { ForgeGrid } from './components/ForgeGrid'
+import { SavedPlansPanel } from './components/SavedPlansPanel'
 import { ELEMENT_KINDS } from './data/elements'
 import { FLOOR } from './data/floor'
-import { findKind } from './data/lookups'
+import { findExtension, findKind } from './data/lookups'
+import { buildCostLines } from './domain/buildCost'
 import { energyBalance } from './domain/energy'
 import { nextRotation } from './domain/placement'
 import { SELECT_TOOL, type Tool } from './domain/tool'
 import type { Placement, Rotation } from './domain/types'
 import { useForgeLayout } from './hooks/useForgeLayout'
+import { useSavedPlans } from './hooks/useSavedPlans'
 import './forge.css'
 
 export function ForgeTab() {
@@ -19,6 +23,8 @@ export function ForgeTab() {
   const [tool, setTool] = useState<Tool>(SELECT_TOOL)
   const [placementRotation, setPlacementRotation] = useState<Rotation>(0)
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null)
+  const savedPlans = useSavedPlans()
+  const [activePlanId, setActivePlanId] = useState<string | null>(null)
   const selectedElement = layout.elements.find((element) => element.id === selectedElementId)
   const selectedKind = selectedElement && findKind(selectedElement.kindId)
 
@@ -40,10 +46,12 @@ export function ForgeTab() {
   function dropElement(placement: Placement) {
     if (tool.mode === 'move') {
       forge.moveElement(tool.elementId, placement)
+      setSelectedElementId(tool.elementId)
       setTool(SELECT_TOOL)
-    } else {
-      forge.placeElement(placement)
+      return
     }
+    const placedElementId = forge.placeElement(placement)
+    if (placedElementId !== null) setSelectedElementId(placedElementId)
   }
 
   function removeElement(elementId: string) {
@@ -68,19 +76,45 @@ export function ForgeTab() {
 
   return (
     <div className="forge-tab">
-      <ElementPalette
-        kinds={ELEMENT_KINDS}
-        tool={tool}
-        placementRotation={placementRotation}
-        onSelectTool={setTool}
-        onRotate={rotate}
-        onClear={() => {
-          if (window.confirm('Effacer toute la forge ?')) {
-            forge.clearElements()
+      <div className="forge-tab__side">
+        <ElementPalette
+          kinds={ELEMENT_KINDS}
+          tool={tool}
+          placementRotation={placementRotation}
+          onSelectTool={setTool}
+          onRotate={rotate}
+          onClear={() => {
+            if (window.confirm('Effacer toute la forge ?')) {
+              forge.clearElements()
+              setSelectedElementId(null)
+            }
+          }}
+        />
+        <BuildCostPanel
+          lines={buildCostLines(layout, { findKind, findExtension })}
+          onToggle={forge.toggleCostExclusion}
+          onChangeConveyorCount={forge.setExcludedConveyorCount}
+        />
+        <SavedPlansPanel
+          plans={savedPlans.plans}
+          activePlanId={activePlanId}
+          currentLayout={layout}
+          onSaveAs={(name) => setActivePlanId(savedPlans.addPlan(name, layout))}
+          onUpdate={(planId) => savedPlans.updatePlan(planId, layout)}
+          onLoad={(plan) => {
+            forge.replaceLayout(plan.layout)
+            setActivePlanId(plan.id)
             setSelectedElementId(null)
-          }
-        }}
-      />
+            setTool(SELECT_TOOL)
+          }}
+          onRename={savedPlans.renamePlan}
+          onRemove={(planId) => {
+            savedPlans.removePlan(planId)
+            if (planId === activePlanId) setActivePlanId(null)
+          }}
+          onImport={(plan) => savedPlans.addPlan(plan.name, plan.layout, plan.savedAt)}
+        />
+      </div>
       <ForgeGrid
         elements={layout.elements}
         floor={FLOOR}

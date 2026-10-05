@@ -1,12 +1,9 @@
 import type { ElementKind, PlacedElement, Recipe } from './types'
 
-export function availableRecipes(
-  element: PlacedElement,
-  recipes: readonly Recipe[],
-): readonly Recipe[] {
+function availableRecipes(element: PlacedElement, recipes: readonly Recipe[]): readonly Recipe[] {
   return recipes.filter(
     (recipe) =>
-      recipe.stationKindId === element.kindId &&
+      recipe.stationKindIds.includes(element.kindId) &&
       (recipe.extensionId === null || element.extensionIds.includes(recipe.extensionId)),
   )
 }

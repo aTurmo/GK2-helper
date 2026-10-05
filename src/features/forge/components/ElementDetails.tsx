@@ -1,9 +1,10 @@
 import { RECIPES } from '../data/recipes'
-import { findExtension, findRecipe } from '../data/lookups'
-import { availableRecipes, withExtensionToggled } from '../domain/stations'
+import { findExtension } from '../data/lookups'
+import { isRotatable } from '../domain/placement'
+import { withExtensionToggled } from '../domain/stations'
 import type { ElementKind, PlacedElement } from '../domain/types'
 import { elementImage } from '../images'
-import { RecipeSummary } from './RecipeSummary'
+import { RecipeList } from './RecipeList'
 
 type ElementDetailsProps = {
   element: PlacedElement
@@ -29,7 +30,7 @@ export function ElementDetails({
         <h2 className="forge-panel__title">{kind.name}</h2>
       </header>
       <div className="element-details__actions">
-        {kind.category !== 'storage' && (
+        {isRotatable(kind) && (
           <button type="button" className="forge-button" onClick={onRotate}>
             Pivoter
           </button>
@@ -55,9 +56,6 @@ type StationSettingsProps = {
 }
 
 function StationSettings({ element, kind, onChange }: StationSettingsProps) {
-  const recipes = availableRecipes(element, RECIPES)
-  const recipe = findRecipe(element.recipeId)
-
   return (
     <>
       <fieldset className="element-details__extensions">
@@ -78,27 +76,16 @@ function StationSettings({ element, kind, onChange }: StationSettingsProps) {
           </label>
         ))}
       </fieldset>
-      <label className="element-details__recipe">
-        Recette
-        <select
-          value={element.recipeId ?? ''}
-          onChange={(event) =>
-            onChange({
-              ...element,
-              recipeId: event.target.value === '' ? null : event.target.value,
-            })
-          }
-        >
-          <option value="">— Aucune —</option>
-          {recipes.map((candidate) => (
-            <option key={candidate.id} value={candidate.id}>
-              {candidate.name}
-              {candidate.extensionId ? ` (${findExtension(candidate.extensionId)?.name})` : ''}
-            </option>
-          ))}
-        </select>
-      </label>
-      {recipe && <RecipeSummary recipe={recipe} />}
+      <section className="element-details__recipes">
+        <h3 className="element-details__subtitle">Recette</h3>
+        <RecipeList
+          recipes={RECIPES.filter((candidate) => candidate.stationKindIds.includes(kind.id))}
+          installedExtensionIds={element.extensionIds}
+          selectedRecipeId={element.recipeId}
+          workIconId={kind.workIconId}
+          onSelect={(recipeId) => onChange({ ...element, recipeId })}
+        />
+      </section>
     </>
   )
 }

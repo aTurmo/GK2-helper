@@ -61,7 +61,24 @@ export function PlacedElementView({
         ))}
       <ElementVisual kind={kind} rotation={element.rotation} floor={floor} />
       {recipe && (
-        <img src={itemImage(recipe.output.itemId)} alt="" className="placed-element__recipe" />
+        <span className="placed-element__recipe">
+          <span className="placed-element__recipe-inputs">
+            {recipe.inputs.map((input) => (
+              <img
+                key={input.itemId}
+                src={itemImage(input.itemId)}
+                alt=""
+                className="placed-element__recipe-icon"
+              />
+            ))}
+          </span>
+          <span className="placed-element__recipe-arrow">→</span>
+          <img
+            src={itemImage(recipe.output.itemId)}
+            alt=""
+            className="placed-element__recipe-icon placed-element__recipe-icon--output"
+          />
+        </span>
       )}
     </button>
   )

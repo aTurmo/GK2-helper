@@ -1,10 +1,12 @@
 import type { Recipe } from '../domain/types'
 
+const ASSEMBLY_BENCHES = ['banc-d-assemblage-1', 'banc-d-assemblage-2']
+
 export const RECIPES: readonly Recipe[] = [
   {
     id: 'lingot-de-fer',
     name: 'Lingot de Fer',
-    stationKindId: 'forge-1',
+    stationKindIds: ['forge-1'],
     extensionId: null,
     work: 2,
     output: { itemId: 'lingot-de-fer', quantity: 1 },
@@ -16,7 +18,7 @@ export const RECIPES: readonly Recipe[] = [
   {
     id: 'brique',
     name: 'Brique',
-    stationKindId: 'forge-1',
+    stationKindIds: ['forge-1'],
     extensionId: null,
     work: 2,
     output: { itemId: 'brique', quantity: 2 },
@@ -28,7 +30,7 @@ export const RECIPES: readonly Recipe[] = [
   {
     id: 'verre',
     name: 'Verre',
-    stationKindId: 'forge-1',
+    stationKindIds: ['forge-1'],
     extensionId: null,
     work: 2,
     output: { itemId: 'verre', quantity: 1 },
@@ -40,7 +42,7 @@ export const RECIPES: readonly Recipe[] = [
   {
     id: 'vaisselle',
     name: 'Vaisselle',
-    stationKindId: 'forge-1',
+    stationKindIds: ['forge-1'],
     extensionId: 'soufflet',
     work: 4,
     output: { itemId: 'vaisselle', quantity: 1 },
@@ -52,7 +54,7 @@ export const RECIPES: readonly Recipe[] = [
   {
     id: 'recipients-en-verre',
     name: 'Récipients en Verre',
-    stationKindId: 'forge-1',
+    stationKindIds: ['forge-1'],
     extensionId: 'soufflet',
     work: 4,
     output: { itemId: 'recipients-en-verre', quantity: 1 },
@@ -64,7 +66,7 @@ export const RECIPES: readonly Recipe[] = [
   {
     id: 'kit-de-fer-1',
     name: 'Kit de Fer I',
-    stationKindId: 'forge-1',
+    stationKindIds: ['forge-1'],
     extensionId: 'marteau',
     work: 3,
     output: { itemId: 'kit-de-fer-1', quantity: 4 },
@@ -73,7 +75,7 @@ export const RECIPES: readonly Recipe[] = [
   {
     id: 'kit-de-bois-1',
     name: 'Kit de Bois I',
-    stationKindId: 'banc-d-assemblage-1',
+    stationKindIds: ASSEMBLY_BENCHES,
     extensionId: null,
     work: 2,
     output: { itemId: 'kit-de-bois-1', quantity: 4 },
@@ -85,7 +87,7 @@ export const RECIPES: readonly Recipe[] = [
   {
     id: 'kit-de-pierre',
     name: 'Kit de Pierre',
-    stationKindId: 'banc-d-assemblage-1',
+    stationKindIds: ASSEMBLY_BENCHES,
     extensionId: null,
     work: 2,
     output: { itemId: 'kit-de-pierre', quantity: 1 },
@@ -94,7 +96,7 @@ export const RECIPES: readonly Recipe[] = [
   {
     id: 'caisse',
     name: 'Caisse',
-    stationKindId: 'banc-d-assemblage-1',
+    stationKindIds: ASSEMBLY_BENCHES,
     extensionId: null,
     work: 3,
     output: { itemId: 'caisse', quantity: 2 },
@@ -104,9 +106,21 @@ export const RECIPES: readonly Recipe[] = [
     ],
   },
   {
+    id: 'fournitures-outils-en-fer',
+    name: 'Fournitures : Outils en Fer',
+    stationKindIds: ['banc-d-assemblage-2'],
+    extensionId: null,
+    work: 5,
+    output: { itemId: 'fournitures-outils-en-fer', quantity: 1 },
+    inputs: [
+      { itemId: 'caisse', quantity: 1 },
+      { itemId: 'kit-de-fer-1', quantity: 4 },
+    ],
+  },
+  {
     id: 'fournitures-fer',
     name: 'Fournitures : Fer',
-    stationKindId: 'banc-d-assemblage-1',
+    stationKindIds: ASSEMBLY_BENCHES,
     extensionId: null,
     work: 2,
     output: { itemId: 'fournitures-fer', quantity: 1 },
@@ -115,7 +129,7 @@ export const RECIPES: readonly Recipe[] = [
   {
     id: 'kit-de-bois-1-auto-marteau',
     name: 'Kit de Bois I',
-    stationKindId: 'banc-d-assemblage-1',
+    stationKindIds: ASSEMBLY_BENCHES,
     extensionId: 'auto-marteau',
     work: 3,
     output: { itemId: 'kit-de-bois-1', quantity: 4 },
@@ -124,7 +138,7 @@ export const RECIPES: readonly Recipe[] = [
   {
     id: 'kit-de-construction-1',
     name: 'Kit de Construction I',
-    stationKindId: 'banc-d-assemblage-1',
+    stationKindIds: ASSEMBLY_BENCHES,
     extensionId: 'auto-marteau',
     work: 5,
     output: { itemId: 'kit-de-construction-1', quantity: 1 },
@@ -136,7 +150,7 @@ export const RECIPES: readonly Recipe[] = [
   {
     id: 'fournitures-materiaux-de-construction-1',
     name: 'Fournitures : Matériaux de Construction I',
-    stationKindId: 'banc-d-assemblage-1',
+    stationKindIds: ASSEMBLY_BENCHES,
     extensionId: 'auto-marteau',
     work: 5,
     output: { itemId: 'fournitures-materiaux-de-construction-1', quantity: 1 },
@@ -148,7 +162,7 @@ export const RECIPES: readonly Recipe[] = [
   {
     id: 'tissu',
     name: 'Tissu',
-    stationKindId: 'banc-d-assemblage-1',
+    stationKindIds: ASSEMBLY_BENCHES,
     extensionId: 'rouet',
     work: 4,
     output: { itemId: 'tissu', quantity: 1 },
@@ -157,7 +171,7 @@ export const RECIPES: readonly Recipe[] = [
   {
     id: 'fournitures-tissu',
     name: 'Fournitures : Tissu',
-    stationKindId: 'banc-d-assemblage-1',
+    stationKindIds: ASSEMBLY_BENCHES,
     extensionId: 'rouet',
     work: 4,
     output: { itemId: 'fournitures-tissu', quantity: 1 },

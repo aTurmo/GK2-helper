@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react'
 import { FLOOR } from '../data/floor'
 import { findKind } from '../data/lookups'
-import { canPlace, nextRotation } from '../domain/placement'
-import type { ForgeLayout, PlacedElement, Placement, Rotation } from '../domain/types'
+import { parseForgeLayout } from '../domain/layoutParsing'
+import { canPlace, isRotatable, nextRotation } from '../domain/placement'
+import type { ForgeLayout, PlacedElement, Placement } from '../domain/types'
 
 const STORAGE_KEY = 'gk2-helper:forge:layout'
-const EMPTY_LAYOUT: ForgeLayout = { elements: [], zombieCount: 0 }
+const EMPTY_LAYOUT: ForgeLayout = {
+  elements: [],
+  zombieCount: 0,
+  costExclusions: [],
+  excludedConveyorCounts: {},
+}
 
 export function useForgeLayout() {
   const [layout, setLayout] = useState<ForgeLayout>(readLayout)
@@ -29,12 +35,14 @@ export function useForgeLayout() {
     return canPlace(placement, elements, findKind, FLOOR.buildableAreas, ignoredElementId)
   }
 
-  function placeElement(placement: Placement): void {
-    if (!isFree(placement)) return
+  function placeElement(placement: Placement): string | null {
+    if (!isFree(placement)) return null
+    const id = crypto.randomUUID()
     updateElements((previous) => [
       ...previous,
-      { ...placement, id: crypto.randomUUID(), extensionIds: [], recipeId: null },
+      { ...placement, id, extensionIds: [], recipeId: null },
     ])
+    return id
   }
 
   function moveElement(elementId: string, placement: Placement): void {
@@ -54,7 +62,8 @@ export function useForgeLayout() {
 
   function rotateElement(elementId: string): void {
     const element = elements.find((candidate) => candidate.id === elementId)
-    if (element === undefined) return
+    const kind = element && findKind(element.kindId)
+    if (element === undefined || kind === undefined || !isRotatable(kind)) return
     const rotated = { ...element, rotation: nextRotation(element.rotation) }
     if (!isFree(rotated, elementId)) return
     replaceElement(rotated)
@@ -74,6 +83,26 @@ export function useForgeLayout() {
     updateElements(() => [])
   }
 
+  function toggleCostExclusion(key: string): void {
+    setLayout((previous) => ({
+      ...previous,
+      costExclusions: previous.costExclusions.includes(key)
+        ? previous.costExclusions.filter((excluded) => excluded !== key)
+        : [...previous.costExclusions, key],
+    }))
+  }
+
+  function setExcludedConveyorCount(kindId: string, excludedCount: number): void {
+    setLayout((previous) => ({
+      ...previous,
+      excludedConveyorCounts: { ...previous.excludedConveyorCounts, [kindId]: excludedCount },
+    }))
+  }
+
+  function replaceLayout(replacement: ForgeLayout): void {
+    setLayout(replacement)
+  }
+
   return {
     layout,
     isFree,
@@ -84,39 +113,18 @@ export function useForgeLayout() {
     replaceElement,
     changeZombieCount,
     clearElements,
+    replaceLayout,
+    toggleCostExclusion,
+    setExcludedConveyorCount,
   }
 }
 
 function readLayout(): ForgeLayout {
   try {
     const stored: unknown = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? 'null')
-    if (typeof stored !== 'object' || stored === null || Array.isArray(stored)) return EMPTY_LAYOUT
-    const candidate = stored as Record<string, unknown>
-    return {
-      elements: Array.isArray(candidate.elements) ? candidate.elements.filter(isPlacedElement) : [],
-      zombieCount: typeof candidate.zombieCount === 'number' ? candidate.zombieCount : 0,
-    }
+    return parseForgeLayout(stored) ?? EMPTY_LAYOUT
   } catch (error) {
     console.warn('Could not read the forge layout, starting empty.', error)
     return EMPTY_LAYOUT
   }
-}
-
-function isPlacedElement(value: unknown): value is PlacedElement {
-  if (typeof value !== 'object' || value === null) return false
-  const candidate = value as Record<string, unknown>
-  return (
-    typeof candidate.id === 'string' &&
-    typeof candidate.kindId === 'string' &&
-    typeof candidate.column === 'number' &&
-    typeof candidate.row === 'number' &&
-    isRotation(candidate.rotation) &&
-    Array.isArray(candidate.extensionIds) &&
-    candidate.extensionIds.every((id) => typeof id === 'string') &&
-    (candidate.recipeId === null || typeof candidate.recipeId === 'string')
-  )
-}
-
-function isRotation(value: unknown): value is Rotation {
-  return value === 0 || value === 1 || value === 2 || value === 3
 }

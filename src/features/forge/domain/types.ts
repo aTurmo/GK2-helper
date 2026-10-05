@@ -18,14 +18,14 @@ export type Extension = {
 export type Recipe = {
   readonly id: string
   readonly name: string
-  readonly stationKindId: string
+  readonly stationKindIds: readonly string[]
   readonly extensionId: string | null
   readonly work: number
   readonly output: ItemQuantity
   readonly inputs: readonly ItemQuantity[]
 }
 
-type ElementCategory = 'conveyor' | 'storage' | 'station'
+type ElementCategory = 'conveyor' | 'other' | 'station'
 
 export type ElementKind = {
   readonly id: string
@@ -37,6 +37,10 @@ export type ElementKind = {
   readonly extensionIds: readonly string[]
   readonly maxExtensions: number
   readonly passThrough: PassThrough | null
+  readonly spriteKindId: string
+  readonly tierLabel: string | null
+  readonly workIconId: string | null
+  readonly spriteIds: readonly string[]
 }
 
 type PassThrough = {
@@ -74,6 +78,8 @@ export type Floor = {
 export type ForgeLayout = {
   readonly elements: readonly PlacedElement[]
   readonly zombieCount: number
+  readonly costExclusions: readonly string[]
+  readonly excludedConveyorCounts: Readonly<Record<string, number>>
 }
 
 export type Reserve = {
