@@ -1,7 +1,7 @@
 const CITY_IMAGES = `${import.meta.env.BASE_URL}images/city`
 
 export function cityMapImage(): string {
-  return `${CITY_IMAGES}/map.png`
+  return `${CITY_IMAGES}/map.jpg`
 }
 
 export function optionImage(optionId: string): string {
