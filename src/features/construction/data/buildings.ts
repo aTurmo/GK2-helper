@@ -1185,6 +1185,15 @@ export const BUILDINGS: readonly Building[] = [
         ],
       },
       {
+        id: 'barricade-3',
+        name: 'Barricade III',
+        requirements: [
+          { materialId: 'vis-en-acier', quantity: 8 },
+          { materialId: 'assemblage-en-acier', quantity: 4 },
+          { materialId: 'montage-du-bois', quantity: 2 },
+        ],
+      },
+      {
         id: 'barricade-a-pieux-1',
         name: 'Barricade à Pieux I',
         requirements: [
@@ -1200,6 +1209,15 @@ export const BUILDINGS: readonly Building[] = [
           { materialId: 'clous-en-fer', quantity: 8 },
           { materialId: 'assemblage-en-fer', quantity: 4 },
           { materialId: 'poutre-renforcee', quantity: 2 },
+        ],
+      },
+      {
+        id: 'barricade-a-pieux-3',
+        name: 'Barricade à Pieux III',
+        requirements: [
+          { materialId: 'vis-en-acier', quantity: 8 },
+          { materialId: 'assemblage-en-acier', quantity: 4 },
+          { materialId: 'montage-du-bois', quantity: 2 },
         ],
       },
       {
@@ -1221,6 +1239,15 @@ export const BUILDINGS: readonly Building[] = [
         ],
       },
       {
+        id: 'barricade-fortifiee-3',
+        name: 'Barricade Fortifiée III',
+        requirements: [
+          { materialId: 'vis-en-acier', quantity: 8 },
+          { materialId: 'assemblage-en-acier', quantity: 4 },
+          { materialId: 'montage-du-bois', quantity: 2 },
+        ],
+      },
+      {
         id: 'tour-d-archer-1',
         name: "Tour d'Archer I",
         requirements: [
@@ -1236,6 +1263,15 @@ export const BUILDINGS: readonly Building[] = [
           { materialId: 'clous-en-fer', quantity: 8 },
           { materialId: 'poutre-renforcee', quantity: 2 },
           { materialId: 'arc-renforce', quantity: 1 },
+        ],
+      },
+      {
+        id: 'tour-d-archer-3',
+        name: "Tour d'Archer III",
+        requirements: [
+          { materialId: 'vis-en-acier', quantity: 8 },
+          { materialId: 'montage-du-bois', quantity: 2 },
+          { materialId: 'arc-de-combat', quantity: 1 },
         ],
       },
       {

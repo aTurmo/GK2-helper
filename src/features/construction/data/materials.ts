@@ -1,8 +1,10 @@
 import type { Material } from '../../material-planner/types'
 
 export const MATERIALS: readonly Material[] = [
+  { id: 'arc-de-combat', name: 'Arc de Combat' },
   { id: 'arc-renforce', name: 'Arc Renforcé' },
   { id: 'argile', name: 'Argile' },
+  { id: 'assemblage-en-acier', name: 'Assemblage en Acier' },
   { id: 'assemblage-en-bronze', name: 'Assemblage en Bronze' },
   { id: 'assemblage-en-fer', name: 'Assemblage en Fer' },
   { id: 'assemblage-sophistique', name: 'Assemblage Sophistiqué' },
@@ -23,6 +25,7 @@ export const MATERIALS: readonly Material[] = [
   { id: 'lentilles', name: 'Lentilles' },
   { id: 'lingot-de-bronze', name: 'Lingot de Bronze' },
   { id: 'lingot-de-fer', name: 'Lingot de Fer' },
+  { id: 'montage-du-bois', name: 'Montage du Bois' },
   { id: 'parchemin-en-peau', name: 'Parchemin en Peau' },
   { id: 'pierre', name: 'Pierre' },
   { id: 'pierre-polie', name: 'Pierre Polie' },
@@ -41,4 +44,5 @@ export const MATERIALS: readonly Material[] = [
   { id: 'tourbe', name: 'Tourbe' },
   { id: 'urne-avec-cendres-1', name: 'Urne avec Cendres I' },
   { id: 'verre', name: 'Verre' },
+  { id: 'vis-en-acier', name: 'Vis en Acier' },
 ]
