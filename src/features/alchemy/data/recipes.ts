@@ -35,8 +35,12 @@ export const RECIPES: readonly Recipe[] = [
   },
   { id: 'liquide-de-reanimation', name: 'Liquide de Réanimation', runes: runes(2, 1, 4) },
   { id: 'poussiere-explosive', name: 'Poussière Explosive', runes: runes(2, 0, 2) },
+  { id: 'pierre-philosophale', name: 'Pierre Philosophale', runes: runes(3, 3, 3) },
+  { id: 'umami', name: 'Umami', runes: runes(0, 4, 4) },
   { id: 'poudre-de-reve', name: 'Poudre de Rêve', runes: runes(0, 1, 1) },
   { id: 'peinture', name: 'Peinture', runes: runes(0, 2, 0) },
   { id: 'laque', name: 'Laque', runes: runes(0, 0, 2) },
+  { id: 'liquide-tanique', name: 'Liquide Tanique', runes: runes(4, 2, 1) },
+  { id: 'alcali', name: 'Alcali', runes: runes(1, 4, 2) },
   { id: 'conservateur', name: 'Conservateur', runes: runes(0, 3, 0) },
 ]
