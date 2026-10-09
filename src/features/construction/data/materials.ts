@@ -4,6 +4,7 @@ export const MATERIALS: readonly Material[] = [
   { id: 'arc-de-combat', name: 'Arc de Combat' },
   { id: 'arc-renforce', name: 'Arc Renforcé' },
   { id: 'argile', name: 'Argile' },
+  { id: 'assemblage-d-ingenierie', name: "Assemblage d'Ingénierie" },
   { id: 'assemblage-en-acier', name: 'Assemblage en Acier' },
   { id: 'assemblage-en-bronze', name: 'Assemblage en Bronze' },
   { id: 'assemblage-en-fer', name: 'Assemblage en Fer' },

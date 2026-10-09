@@ -760,12 +760,30 @@ export const BUILDINGS: readonly Building[] = [
         ],
       },
       {
+        id: 'banc-d-assemblage-perceuse',
+        name: "Banc d'Assemblage : Perceuse",
+        requirements: [
+          { materialId: 'engrenage-en-bronze', quantity: 2 },
+          { materialId: 'assemblage-en-fer', quantity: 4 },
+          { materialId: 'poutre-en-bois', quantity: 2 },
+        ],
+      },
+      {
         id: 'forge-1',
         name: 'Forge I',
         requirements: [
           { materialId: 'planche-renforcee', quantity: 6 },
           { materialId: 'assemblage-en-bronze', quantity: 4 },
           { materialId: 'engrenage-en-bronze', quantity: 4 },
+        ],
+      },
+      {
+        id: 'forge-2',
+        name: 'Forge II',
+        requirements: [
+          { materialId: 'poutre-renforcee', quantity: 6 },
+          { materialId: 'vis-en-acier', quantity: 12 },
+          { materialId: 'assemblage-d-ingenierie', quantity: 4 },
         ],
       },
       {
@@ -784,6 +802,60 @@ export const BUILDINGS: readonly Building[] = [
           { materialId: 'parchemin-en-peau', quantity: 4 },
           { materialId: 'assemblage-en-fer', quantity: 2 },
           { materialId: 'planche-de-bois', quantity: 4 },
+        ],
+      },
+      {
+        id: 'forge-presse',
+        name: 'Forge : Presse',
+        requirements: [
+          { materialId: 'assemblage-d-ingenierie', quantity: 2 },
+          { materialId: 'assemblage-en-acier', quantity: 4 },
+          { materialId: 'poutre-en-bois', quantity: 2 },
+        ],
+      },
+      {
+        id: 'forge-pierre-a-meuler',
+        name: 'Forge : Pierre à Meuler',
+        requirements: [
+          { materialId: 'assemblage-d-ingenierie', quantity: 2 },
+          { materialId: 'assemblage-en-acier', quantity: 4 },
+          { materialId: 'bloc-de-pierre', quantity: 1 },
+        ],
+      },
+      {
+        id: 'cuisine-1',
+        name: 'Cuisine I',
+        requirements: [
+          { materialId: 'planche-renforcee', quantity: 6 },
+          { materialId: 'engrenage-en-bronze', quantity: 4 },
+          { materialId: 'assemblage-en-bronze', quantity: 4 },
+        ],
+      },
+      {
+        id: 'cuisine-2',
+        name: 'Cuisine II',
+        requirements: [
+          { materialId: 'poutre-renforcee', quantity: 4 },
+          { materialId: 'engrenage-en-bronze', quantity: 8 },
+          { materialId: 'assemblage-sophistique', quantity: 8 },
+        ],
+      },
+      {
+        id: 'cuisine-meule',
+        name: 'Cuisine : Meule',
+        requirements: [
+          { materialId: 'pierre-polie', quantity: 2 },
+          { materialId: 'baton', quantity: 4 },
+          { materialId: 'assemblage-en-fer', quantity: 2 },
+        ],
+      },
+      {
+        id: 'cuisine-machine-a-sceller',
+        name: 'Cuisine : Machine à Sceller',
+        requirements: [
+          { materialId: 'assemblage-sophistique', quantity: 4 },
+          { materialId: 'lingot-de-fer', quantity: 1 },
+          { materialId: 'planche-de-bois', quantity: 2 },
         ],
       },
     ],
