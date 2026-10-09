@@ -1,4 +1,4 @@
-import type { Rotation } from './domain/types'
+import type { Quality, Rotation } from './domain/types'
 
 const FORGE_IMAGES = `${import.meta.env.BASE_URL}images/forge`
 
@@ -20,6 +20,10 @@ export function conveyorSpriteImage(spriteId: string): string {
 
 export function workIconImage(workIconId: string): string {
   return `${FORGE_IMAGES}/ui/${workIconId}.png`
+}
+
+export function qualityStarImage(quality: Quality): string {
+  return `${FORGE_IMAGES}/ui/star-${quality}.png`
 }
 
 export function elementImage(imageId: string): string {

@@ -5,9 +5,12 @@ export type Item = {
   readonly name: string
 }
 
+export type Quality = 'bronze' | 'silver' | 'gold'
+
 export type ItemQuantity = {
   readonly itemId: string
   readonly quantity: number
+  readonly quality?: Quality
 }
 
 export type Extension = {

@@ -1,6 +1,7 @@
 import { findExtension, findItem } from '../data/lookups'
 import type { ItemQuantity, Recipe } from '../domain/types'
-import { elementImage, itemImage, workIconImage } from '../images'
+import { elementImage, workIconImage } from '../images'
+import { ItemIcon } from './ItemIcon'
 
 type RecipeListProps = {
   recipes: readonly Recipe[]
@@ -113,7 +114,12 @@ function ItemBadge({ itemQuantity }: { itemQuantity: ItemQuantity }) {
   const name = findItem(itemQuantity.itemId)?.name ?? itemQuantity.itemId
   return (
     <span className="item-badge" title={name}>
-      <img src={itemImage(itemQuantity.itemId)} alt={name} className="item-badge__icon" />
+      <ItemIcon
+        itemId={itemQuantity.itemId}
+        quality={itemQuantity.quality}
+        alt={name}
+        className="item-badge__icon"
+      />
       <span className="item-badge__quantity">×{itemQuantity.quantity}</span>
     </span>
   )

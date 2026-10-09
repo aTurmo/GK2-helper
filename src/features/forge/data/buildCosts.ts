@@ -8,6 +8,10 @@ const EXTENSION_BUILDABLE_IDS: Readonly<Record<string, string>> = {
   marteau: 'forge-marteau',
   'auto-marteau': 'banc-d-assemblage-auto-marteau',
   rouet: 'banc-d-assemblage-rouet',
+  perceuse: 'banc-d-assemblage-perceuse',
+  presse: 'forge-presse',
+  meule: 'cuisine-meule',
+  'machine-a-sceller': 'cuisine-machine-a-sceller',
 }
 
 export function elementBuildCost(kindId: string): readonly MaterialRequirement[] {

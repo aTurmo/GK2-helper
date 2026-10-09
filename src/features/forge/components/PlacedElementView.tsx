@@ -3,6 +3,7 @@ import { footprintOf, occupiedAreas } from '../domain/placement'
 import type { ElementKind, Floor, PlacedElement } from '../domain/types'
 import { itemImage } from '../images'
 import { ElementVisual } from './ElementVisual'
+import { ItemIcon } from './ItemIcon'
 
 type PlacedElementViewProps = {
   element: PlacedElement
@@ -64,9 +65,10 @@ export function PlacedElementView({
         <span className="placed-element__recipe">
           <span className="placed-element__recipe-inputs">
             {recipe.inputs.map((input) => (
-              <img
+              <ItemIcon
                 key={input.itemId}
-                src={itemImage(input.itemId)}
+                itemId={input.itemId}
+                quality={input.quality}
                 alt=""
                 className="placed-element__recipe-icon"
               />

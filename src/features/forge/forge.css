@@ -842,6 +842,20 @@ label.build-cost__line {
   border-radius: 4px;
 }
 
+.item-icon {
+  position: relative;
+  display: inline-flex;
+}
+
+.item-icon__star {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 45%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
 @media (max-width: 900px) {
   .forge-tab {
     grid-template-columns: 1fr;
